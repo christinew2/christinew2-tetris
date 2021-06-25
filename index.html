@@ -9,6 +9,50 @@
     <title>Unit 1 Game</title>
 </head>
 <body>
+    <h1 id="game-name">Tetris</h1>
+
+    <section id="cleared-container">
+        <p class=".sidebar-title">Lines Cleared</p>
+        <div id="number">10</div>
+    </section>
+    <section id="hold-container">
+        <p class=".sidebar-title">Hold</p>
+        <div id="hold">BLOCK</div>
+    </section>
+    <section id="next-container">
+        <p class=".sidebar-title">Next Up</p>
+        <div id="next-box-1">block1</div>
+        <div id="next-box-2">block2</div>
+        <div id="next-box-3">block3</div>
+        <div id="next-box-4">block4</div>
+    </section>
+    <div class="board-area">
+        <div id="board-container">
+            <div>Square 1 Sample</div>
+            <!-- grid itself will be made in JS -->
+        </div>
+    </div>
+    <section id="button-container">
+        <div id="start-pause-container">
+            <button id="pause" class="buttons">Pause</button>
+            <button id="start" class="buttons">Start</button>
+        </div>
+        <div id="rotators-container">
+            <button id="rotate-ccw" class="buttons">CCW</button>
+            <button id="rotate-cw" class="buttons">CW</button>
+        </div>
+        <div id="arrows-container">
+            <button id="move-left" class="buttons">LEFT</button>
+            <button id="move-right" class="buttons">RIGHT</button>
+            <button id="move-down" class="buttons">DOWN</button>
+        </div>
+    </section>
+    <section id="settings-container">
+        <button id="light-dark-mode">LIGHT/DARK</button>
+        <button id="settings" class="buttons">Settings</button>
+    </section>
+
+
     
 </body>
 </html>
