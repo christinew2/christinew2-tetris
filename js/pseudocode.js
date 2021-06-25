@@ -80,6 +80,7 @@ placeNewBlock(){
 }
 
 moveBlockDown(){
+    ** Will need a timer for block to move down every interval
     checkForVerticalCollision()
     renderBoard()
 
