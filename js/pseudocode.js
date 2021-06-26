@@ -20,7 +20,7 @@ General Pseudocode:
     c. gameOver: true/false
     d. atRest: true/false (if block in play is at rest or not)
     e. linesCleared:initialize to 0
-    f. shapes array: array of unique blocks - next-up array will randomize from this array
+    (move to constants) f. shapes array: array of unique blocks - next-up array will randomize from this array
     g. nextUp array: array of block to be played
     h. hold: shape being held
     i. board array: array of row arrays
@@ -42,6 +42,7 @@ General Pseudocode:
     b. all buttons for mobile
     c. "open control panel" button
     d. "settings" button
+    e. reset button
 
 ============================= FUNCTIONS ================================== 
 init(){
