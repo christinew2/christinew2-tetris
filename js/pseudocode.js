@@ -15,8 +15,8 @@ General Pseudocode:
     b. currentBlock: holds current block in play + position of block in play
 
 - VARIABLES
-    a. gameStart: true/false
-    b. gamePause: true/false
+    a. gameStart: true/false ****check if necessary
+    b. gamePause: true/false ****check if necessary
     c. gameOver: true/false
     d. blockInMotion: true/false (if block in play is at rest or not)
     e. linesCleared:initialize to 0
@@ -56,7 +56,7 @@ gameStart() { --> called by game start listener
         --> while the next up array is not full
         fillNextUpArray()
     }
-    blockInMotion = true
+   
     placeNewBlock()
     blockInPlay()
 }
@@ -77,7 +77,7 @@ blockInPlay(){
 }
 
 placeNewBlock(){
-    atRest = false
+    blockInMotion = true
     grab block from next-up array (shift) & add to board
     fillNextUpArray()
 }
