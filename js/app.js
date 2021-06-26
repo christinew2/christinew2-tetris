@@ -147,8 +147,9 @@ let boardArray = []
 
 /*------------------------- Cached Element References --------------------------*/
 const board = document.querySelector(".board-container")
-const form = document.querySelector("form")
 
+
+const form = document.querySelector("form")
 
 /*----------------------------- Event Listeners --------------------------------*/
 // keyboard input
@@ -193,13 +194,40 @@ document.addEventListener("keydown", function(event){
           return; // Quit when this doesn't handle the key event.
       }
 })
-
-
-
-
-// form.addEventListener("reset", init) 
+// buttons for mobile
+document.querySelector("#start").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#rotate-ccw").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#rotate-cw").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#move-left").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#move-right").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#move-down").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+// settings
+document.querySelector("#light-dark-mode").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#settings").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#controls-panel").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+form.addEventListener("reset", init) 
 
 
 /*-------------------------------- Functions --------------------------------*/
 
-
+function init(){
+    console.log("init")
+}
