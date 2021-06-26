@@ -18,7 +18,7 @@ General Pseudocode:
     a. gameStart: true/false
     b. gamePause: true/false
     c. gameOver: true/false
-    d. atRest: true/false (if block in play is at rest or not)
+    d. blockInMotion: true/false (if block in play is at rest or not)
     e. linesCleared:initialize to 0
     (move to constants) f. shapes array: array of unique blocks - next-up array will randomize from this array
     g. nextUp array: array of block to be played
@@ -48,6 +48,7 @@ General Pseudocode:
 init(){
     clear/reset all variables 
     clear board
+    create board
 }
 
 gameStart() { --> called by game start listener
@@ -55,6 +56,7 @@ gameStart() { --> called by game start listener
         --> while the next up array is not full
         fillNextUpArray()
     }
+    blockInMotion = true
     placeNewBlock()
     blockInPlay()
 }
@@ -65,7 +67,7 @@ fillNextUpArray(){
 }
 
 blockInPlay(){
-    while (atRest = false){
+    while (blockInMotion = true){
         moveBlockDown()
     }
     while (gameOver = false){
@@ -91,13 +93,13 @@ moveBlockDown(){
 checkForVerticalCollision(){
     --> block meets "bottom" (could be board bottom or other rested blocks)
     if yes:
-        - atRest = true
+        - blockInMotion = false
         - don't place shifted block
         - stop further movement down
         - checkForGameOver()
     if no: 
         - place downward-shifted block
-        - return back to while (atRest = false)moveBlockDown loop
+        - return back to while (blockInMotion = true)moveBlockDown loop
 }
 
 checkForGameOver(){

@@ -138,10 +138,11 @@ const tBlock = {
 
 /*------------------------------- Constants --------------------------------*/
 const emptyRow = [1,0,0,0,0,0,0,0,0,0,0,1] // 10 playable squares + 1 border square on each side
+const fullRow = [1,1,1,1,1,1,1,1,1,1,1,1] // used for top and bottom borders
 const allBlocks = [lBlock[0], reverseLBlock[0], square[0], iBlock[0], zBlock[0], reverseZBlock[0], tBlock[0]]
 
 /*------------------------------- Variables --------------------------------*/
-let gameStart, gamePause, gameOver, atRest, linesCleared
+let gameStart, gamePause, gameOver, blockInMotion, linesCleared
 let nextUp = []
 let boardArray = []
 
@@ -227,7 +228,19 @@ form.addEventListener("reset", init)
 
 
 /*-------------------------------- Functions --------------------------------*/
-
+init()
 function init(){
-    console.log("init")
+    gameStart, gameOver, blockInMotion = false
+    linesCleared = 0
+    boardArray, nextUp = []
+    createBoard()
+}
+
+function createBoard(){
+    boardArray.push(fullRow) // top border
+    for (let i=0; i < 20; i++){
+    // height of 20
+        boardArray.push(emptyRow)
+    } 
+    boardArray.push(fullRow) // bottom border
 }
