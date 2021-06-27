@@ -2,7 +2,7 @@
 const currentBlock = {
     block: null,
     rotation: null,  // check if this is necessary
-
+    rotationArray: [],
     // starting positions of 4x4 holding current block
     column: null, 
     row: null,
@@ -12,8 +12,9 @@ const tester = {
     board: [],
     column: null, 
     row: null,
+    block: null,
+    rotation: null,  // check if this is necessary
 }
-
 const lBlock = {
     0: [[0,0,0,0],
         [0,0,1,0],
@@ -145,10 +146,10 @@ const tBlock = {
 /*------------------------------- Constants --------------------------------*/
 const emptyRow = [1,0,0,0,0,0,0,0,0,0,0,1] // 10 playable squares + 1 border square on each side
 const fullRow = [1,1,1,1,1,1,1,1,1,1,1,1] // used for top and bottom borders
-const allBlocks = [lBlock[0], reverseLBlock[0], square[0], iBlock[0], zBlock[0], reverseZBlock[0], tBlock[0]]
+const allBlocks = [lBlock, reverseLBlock, square, iBlock, zBlock, reverseZBlock, tBlock]
 
 /*------------------------------- Variables --------------------------------*/
-let gameOver, blockInMotion, linesCleared, collided
+let gameOver, blockInMotion, linesCleared, timerIntervalId
 let nextUp = []
 let boardArray = []
 
@@ -204,19 +205,26 @@ document.addEventListener("keydown", function(event){
 // buttons for mobile
 document.querySelector("#start").addEventListener("click", gameStart)
 document.querySelector("#rotate-ccw").addEventListener("click", function(event){
-    console.log(event.target.id)
+    counterCWRotation()
+    console.log("I'M ROTATING COUNTERCLOCKWISE!!!")
 })
 document.querySelector("#rotate-cw").addEventListener("click", function(event){
-    console.log(event.target.id)
+    CWRotation()
+    console.log("I'M ROTATING CLOCKWISE!!!")
 })
 document.querySelector("#move-left").addEventListener("click", function(event){
-    console.log(event.target.id)
+    userLeftMovement()
+    console.log("I'M MOVING LEFT!!!")
+    
 })
 document.querySelector("#move-right").addEventListener("click", function(event){
-    console.log(event.target.id)
+    userRightMovement()
+    console.log("I'M MOVING RIGHT!!!!!")
 })
 document.querySelector("#move-down").addEventListener("click", function(event){
-    console.log(event.target.id)
+    console.log("I'M MOVING DOWN!!!")
+    // console.log("board array DOWN: ", JSON.parse(JSON.stringify(boardArray)))
+    moveDown()
 })
 // settings
 document.querySelector("#light-dark-mode").addEventListener("click", function(event){
@@ -240,6 +248,7 @@ function init(){
     collided = false
     linesCleared = 0
     boardArray = []
+    timerIntervalId = null
     tester.board = []
     nextUp = []
     createBoard()
@@ -252,7 +261,8 @@ function createBoard(){
         boardArray.push(emptyRow.slice()) // board height of 20
     } 
 
-    // bottom border requires two layers for testing
+    // bottom border requires three layers for testing
+    boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
 }
@@ -262,47 +272,47 @@ function gameStart(){
     while (nextUp.length < 4){
         fillNextUpArray()
     }
+    
     placeNewBlock()
-    blockInPlay()
 }
 
 function fillNextUpArray(){
     let randomIndex = Math.floor(Math.random() * 7)
-    let randomBlock = allBlocks[randomIndex]
+    let randomBlockObj = allBlocks[randomIndex]
    
-    nextUp.push(randomBlock)
+    nextUp.push(randomBlockObj)
     renderNextUp()
 }
-// init()
-// fillNextUpArray()
-// placeNewBlock()
+
 function placeNewBlock(){
-    console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-    blockInMotion = true
-    currentBlock.block = nextUp.shift() // input new block in play, should auto be in 0 rotation
+    // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+    // blockInMotion = true
+    currentBlock.rotationArray = nextUp.shift()
+    currentBlock.block = currentBlock.rotationArray[0] // input new block in play, should auto be in 0 rotation
+    currentBlock.rotation = 0
+
 
     // initialize current block position to start position
     currentBlock.column = 4
     currentBlock.row = 0
-    tester.column = currentBlock.column
-    tester.row = currentBlock.row
+    // tester.column = currentBlock.column
+    // tester.row = currentBlock.row
 
-    // test if placement hits anything
-    // tester.board = boardArray.slice()
-    
     buildTestBoard()
     placeBlockOnABoard(tester.board, tester)
-    console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
-    checkForVerticalCollision() // if collided, return true
+    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
+    let collided = checkForCollision() // if collided, return true
     console.log(collided)
     if (collided === false){
     // new block does not hit anything, so OK to place
         placeBlockOnABoard(boardArray, currentBlock)
-        console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+        // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
         renderBoard()
+        blockInPlay()
     } else {
         console.log("GAME OVER: ", JSON.parse(JSON.stringify(boardArray)))
         gameOver = true
+        
     }
     // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
     // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
@@ -312,77 +322,88 @@ function placeNewBlock(){
     // removeBlockOnBoard(tester.board, tester)
     // console.log(JSON.parse(JSON.stringify(tester.board)))
 
-    
 }
 function buildTestBoard(){
     tester.board = []
     boardArray.forEach(row => {
         tester.board.push(row.slice())
     })
+    tester.row = currentBlock.row
+    tester.column = currentBlock.column
+    tester.block = currentBlock.block
+    tester.rotation = currentBlock.rotation
 }
 
 function placeBlockOnABoard(arr, obj){
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
-            arr[r + obj.row][c + obj.column] += currentBlock.block[r][c]        
+            // console.log("obj.row: ",obj.row)
+            // console.log("obj.column: ",obj.column)
+            // console.log("current block value: ", currentBlock.block[r][c])
+            arr[r + obj.row][c + obj.column] += obj.block[r][c]        
         }
     } 
     // console.log("i finished the function")  
 }
 
-function checkForVerticalCollision(){
+function checkForCollision(){
     for (let rowArr of tester.board){
+
         if (rowArr.includes(2)){
-            collided = true
-            return 
+            
+            return true
         }
     }
-    collided = false
-    return 
- }
 
-function blockInPlay(){
-    while (blockInMotion === true){
-        console.log("entered blockinplay")
-        // add timer with moveBlockDown
-        moveBlockDown()  
-        console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))      
-    }
-    while (gameOver === false){
-        console.log("hello")
-        console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-        // gameOver= true
-        placeNewBlock()
-        blockInPlay()
-    }
+    return false
 }
 
-function moveBlockDown(){
-    // blockInMotion = false //GET RID OF THIS
+function blockInPlay(){
+    timerIntervalId = setInterval(gravity, 1000)
+   
+    // while (gameOver === false){
+    //     console.log("hello")
+    //     console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+    //     // gameOver= true
+    //     placeNewBlock()
+    //     blockInPlay()
+    // }
+}
 
-    removeBlockOnBoard(tester.board, tester)
-    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
-    tester.row += 1
-    placeBlockOnABoard(tester.board, tester)
-    checkForVerticalCollision() // if collided, return true
-    if (collided === false){
-    // new block does not hit anything, so OK to place
-        removeBlockOnBoard(boardArray, currentBlock)
-        currentBlock.row += 1
-        placeBlockOnABoard(boardArray, currentBlock)
-        renderBoard()
-    } else{
-        blockInMotion = false // block stops moving
-        console.log("END OF MOVEBLOCKDOWN")
-        renderBoard()
+function gravity(){
+    console.log("entered gravity")
+    let collided = moveDown()
+    if (collided === true){
+        // blockInMotion = false // block stops moving
+        clearInterval(timerIntervalId)
+        timerIntervalId = null
+        console.log("END OF gravity")
         checkForFullRow()
+        // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+        placeNewBlock()
     }
-    
-    // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
     // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
 }
 
-function removeBlockOnBoard(arr, obj){
+function moveDown(){
+    buildTestBoard()
+
+    removeBlockOnABoard(tester.board, tester)
+    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
+    tester.row += 1
+    placeBlockOnABoard(tester.board, tester)
+    let collided = checkForCollision() // if collided, return true
+    if (collided === false){
+    // new block does not hit anything, so OK to place
+        removeBlockOnABoard(boardArray, currentBlock)
+        currentBlock.row += 1
+        placeBlockOnABoard(boardArray, currentBlock)
+        renderBoard()
+    } 
+    return collided 
+}
+
+function removeBlockOnABoard(arr, obj){
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
             if (arr[r + obj.row][c + obj.column] === currentBlock.block[r][c]){
@@ -405,8 +426,105 @@ function checkForFullRow(){
     }
 }
 
+function userLeftMovement(event){
+    buildTestBoard()
+
+    removeBlockOnABoard(tester.board, tester)
+    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
+    // console.log("current row and column: ", currentBlock.row,  currentBlock.column)
+    // console.log("tester row and column: ", tester.row,  tester.column)
+    tester.column -= 1
+    placeBlockOnABoard(tester.board, tester)
+    let collided = checkForCollision() // if collided, return true
+    console.log("collided: ", collided)
+    if (collided === false){
+    // new block does not hit anything, so OK to place
+        removeBlockOnABoard(boardArray, currentBlock)
+        currentBlock.column -= 1
+        placeBlockOnABoard(boardArray, currentBlock)
+        renderBoard()
+    } 
+}
+function userRightMovement(event){
+    buildTestBoard()
+
+    removeBlockOnABoard(tester.board, tester)
+    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
+    // console.log("current row and column: ", currentBlock.row,  currentBlock.column)
+    // console.log("tester row and column: ", tester.row,  tester.column)
+    tester.column += 1
+    placeBlockOnABoard(tester.board, tester)
+    let collided = checkForCollision() // if collided, return true
+    console.log("collided: ", collided)
+    if (collided === false){
+    // new block does not hit anything, so OK to place
+        removeBlockOnABoard(boardArray, currentBlock)
+        currentBlock.column += 1
+        placeBlockOnABoard(boardArray, currentBlock)
+        renderBoard()
+    } else{
+        // console.log("board array RIGHT: ", JSON.parse(JSON.stringify(boardArray)))
+    }
+    
+}
+
+function CWRotation (){
+    buildTestBoard()
+    removeBlockOnABoard(tester.board, tester)
+
+    if (tester.rotation < 3){
+        tester.rotation += 1
+    } else{
+        tester.rotation = 0
+    }
+    tester.block = currentBlock.rotationArray[tester.rotation]
+    
+    placeBlockOnABoard(tester.board, tester)
+    let collided = checkForCollision() // if collided, return true
+    console.log("collided: ", collided)
+    if (collided === false){
+    // new block does not hit anything, so OK to place
+        removeBlockOnABoard(boardArray, currentBlock)
+        currentBlock.rotation = tester.rotation
+        currentBlock.block = currentBlock.rotationArray[currentBlock.rotation]
+        placeBlockOnABoard(boardArray, currentBlock)
+        renderBoard()
+    } else{
+        console.log("board array ROTATION: ", JSON.parse(JSON.stringify(boardArray)))
+    }
+    
+}
+function counterCWRotation (){
+    buildTestBoard()
+    removeBlockOnABoard(tester.board, tester)
+
+    if (tester.rotation > 0){
+        tester.rotation -= 1
+    } else{
+        tester.rotation = 3
+    }
+    tester.block = currentBlock.rotationArray[tester.rotation]
+    
+    placeBlockOnABoard(tester.board, tester)
+    let collided = checkForCollision() // if collided, return true
+    console.log("collided: ", collided)
+    if (collided === false){
+    // new block does not hit anything, so OK to place
+        removeBlockOnABoard(boardArray, currentBlock)
+        currentBlock.rotation = tester.rotation
+        currentBlock.block = currentBlock.rotationArray[currentBlock.rotation]
+        placeBlockOnABoard(boardArray, currentBlock)
+        renderBoard()
+    } else{
+        console.log("board array CCW ROTATION: ", JSON.parse(JSON.stringify(boardArray)))
+    }
+    
+}
+ 
 function renderBoard(){
-    console.log("you still need to create render board()")
+    // console.log("you still need to create render board()")
+    console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+
 }
 
 function renderNextUp(){
