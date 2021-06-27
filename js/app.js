@@ -1,11 +1,11 @@
 /*-------------------------------- Objects --------------------------------*/
 const currentBlock = {
     block: null,
-    rotation: null,
+    rotation: null,  // check if this is necessary
 
     // starting positions of 4x4 holding current block
-    xPos: null, 
-    yPos: null,
+    column: null, 
+    row: null,
 }
 
 const lBlock = {
@@ -46,8 +46,8 @@ const reverseLBlock = {
 }
 const square = {
     0: [[0,0,0,0],
-        [0,1,1,0],
-        [0,1,1,0],
+        [0,"A","B",0],
+        [0,"C","D",0],
         [0,0,0,0]],
     1: [[0,0,0,0],
         [0,1,1,0],
@@ -226,22 +226,26 @@ document.querySelector("#controls-panel").addEventListener("click", function(eve
 })
 form.addEventListener("reset", init) 
 
-
+// DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
 /*-------------------------------- Functions --------------------------------*/
 init()
+
 function init(){
-    gameOver, blockInMotion = false
+    gameOver = false
+    blockInMotion = false
     linesCleared = 0
-    boardArray, nextUp = []
+    boardArray = []
+    nextUp = []
     createBoard()
 }
 
 function createBoard(){
-    boardArray.push(fullRow) // top border
+// note: slice is needed so that a new copy of the emptyRow/fullRow arrays is pushed onto the boardArray, rather than just a reference to the same array (this affects accessing elements in the array)
+    boardArray.push(fullRow.slice()) // top border
     for (let i=0; i < 20; i++){
-        boardArray.push(emptyRow) // board height of 20
+        boardArray.push(emptyRow.slice()) // board height of 20
     } 
-    boardArray.push(fullRow) // bottom border
+    boardArray.push(fullRow.slice()) // bottom border
 }
 
 function gameStart(){
@@ -262,11 +266,29 @@ function fillNextUpArray(){
 }
 
 function placeNewBlock(){
+    
     blockInMotion = true
+    currentBlock.block = nextUp.shift() // input new block in play, should auto be in 0 rotation
+
+    //initialize current block position to start position
+    currentBlock.column = 4
+    currentBlock.row = 0
+
+    // place block on boardArray
+    for (let r = 0; r < 4; r++){
+            for (let c = 0; c < 4; c++){
+            if (boardArray[r][c+4] !== 1){
+                boardArray[r][c+4] = currentBlock.block[r][c]
+            }
+        }
+    }
+
+    // fill nextUp array
+    fillNextUpArray()
 }
 
 function blockInPlay(){
-    console.log("you still need to create blockInPlay()")
+    while (blockInMotion = )
 }
 
 function renderNextUp(){
