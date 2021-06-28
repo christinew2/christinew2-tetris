@@ -450,6 +450,20 @@ function renderGameOver(){
     console.log("GAME IS OVER")
 }
 
+/*------------------------- Day/Night Theme Handlers -----------------------------*/
+function setTheme(theme){
+    localStorage.setItem("theme", theme)
+    document.documentElement.className = theme
+}
+
+function toggleTheme(){
+    localStorage.getItem("theme") === "theme-light" ?
+    setTheme("theme-dark")
+    :
+        setTheme("theme-light");
+}
+toggleTheme()
+
 /*----------------------------- Event Listeners --------------------------------*/
 // keyboard input
 document.addEventListener("keydown", function(event){
@@ -557,9 +571,7 @@ document.querySelector("#hold-button").addEventListener("click", function(event)
     }
 })
 // settings
-document.querySelector("#light-dark-mode").addEventListener("click", function(event){
-    console.log(event.target.id)
-})
+document.querySelector("#light-dark-mode").addEventListener("click", toggleTheme)
 document.querySelector("#settings").addEventListener("click", function(event){
     console.log(event.target.id)
 })

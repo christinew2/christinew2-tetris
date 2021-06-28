@@ -17,15 +17,52 @@ html {
     font-size: 62.5%
   }
   
+  .theme-light {
+    --background: white;
+  }
+
+  .theme-dark {
+    --background: black;
+
+  }
+
   body {
     text-align: center;
-    background-color: gray;
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   /* Use a system font, if none are available use an available sans-sarif   font */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     margin: 0;
   }
 
+  
+  #title-container{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+  }
+
+  #status-container,
+  #button-container,
+  #settings-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: baseline;
+    text-align: center;
+  }
+
+
+  #status-container,
+  #button-container{
+    max-width: calc(10 * 4.5vmin);
+  }
+  
   #board-container {
     display: inline-grid;
     grid-template-rows: repeat(20, 4.5vmin);
