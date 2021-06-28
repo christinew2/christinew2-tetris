@@ -1,8 +1,8 @@
 /*-------------------------------- Objects --------------------------------*/
-const currentBlock = {
+const currentState = {
     block: null,
     rotation: null,  // check if this is necessary
-    rotationArray: [],
+    blockObject: [],
     // starting positions of 4x4 holding current block
     column: null, 
     row: null,
@@ -149,59 +149,65 @@ const fullRow = [1,1,1,1,1,1,1,1,1,1,1,1] // used for top and bottom borders
 const allBlocks = [lBlock, reverseLBlock, square, iBlock, zBlock, reverseZBlock, tBlock]
 
 /*------------------------------- Variables --------------------------------*/
-let gameOver, gamePaused, blockInMotion, linesCleared, timerIntervalId
+let gameOver, gamePaused, linesCleared, timerIntervalId, holdingBlock
 let nextUp = []
 let boardArray = []
-let heldBlockArray = []
+let heldBlockObj = []
 
 /*------------------------- Cached Element References --------------------------*/
 const board = document.querySelector("#board-container")
 const startPauseButton = document.querySelector("#start-pause")
 const form = document.querySelector("form")
 
-
-
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
+ // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
+    // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
+    // fill nextUp array
+    
+    // removeBlockOnBoard(tester.board, tester)
+    // console.log(JSON.parse(JSON.stringify(tester.board)))
 /*-------------------------------- Functions --------------------------------*/
 createDOMBoard()
 init()
 
-function init(){
-    gameOver = false
-    blockInMotion = false
-    collided = false
-    gamePaused = false
-    linesCleared = 0
-    boardArray = []
-    timerIntervalId = null
-    tester.board = []
-    nextUp = []
-    heldBlock = []
-    createBoard()
-}
-
+// On-screen game board set up
 function createDOMBoard(){
     for (cell = 0; cell < (20 * 10); cell++) {
-      let square = document.createElement("div");
-    //   square.innerText = cell;
+      let square = document.createElement("div")
       square.classList.add("square")
       board.appendChild(square)
     }
 }
 
-function createBoard(){
+function init(){
+    gameOver = false
+    collided = false
+    gamePaused = true
+    holdingBlock = false
+    linesCleared = 0
+    boardArray = []
+    tester.board = []
+    nextUp = []
+    heldBlock = []
+    createBoardArray()
+}
+
+function createBoardArray(){
+// creates board array used for logic
+// standard tetris board is w10 x h20
+// board array consists of 1 top border and 3 bottom borders used for testing valid moves - borders are not rendered on DOM 
 // note: slice is needed so that a new copy of the emptyRow/fullRow arrays is pushed onto the boardArray, rather than just a reference to the same array (this affects accessing elements in the array)
-    boardArray.push(fullRow.slice()) // top border
+    
+    boardArray.push(fullRow.slice())
     for (let i=0; i < 20; i++){
-        boardArray.push(emptyRow.slice()) // board height of 20
+        boardArray.push(emptyRow.slice())
     } 
-
-    // bottom border requires three layers for testing
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
-
     renderBoard()
+    gameStart()
 }
 
 function gameStart(){
@@ -209,11 +215,11 @@ function gameStart(){
     while (nextUp.length < 4){
         fillNextUpArray()
     }
-    
     setUpNewBlock()
 }
 
 function fillNextUpArray(){
+// adds a random block type (entire object is added) to the nextUp array
     let randomIndex = Math.floor(Math.random() * 7)
     let randomBlockObj = allBlocks[randomIndex]
    
@@ -222,126 +228,61 @@ function fillNextUpArray(){
 }
 
 function setUpNewBlock(){
-    // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-    // blockInMotion = true
-    currentBlock.rotationArray = nextUp.shift()
-    currentBlock.block = currentBlock.rotationArray[0] // input new block in play, should auto be in 0 rotation
-    currentBlock.rotation = 0
-
+// sets the nextUp block as the current block
+// adjusts current state accordingly
+    currentState.blockObject = nextUp.shift()
+    currentState.rotation = 0
+    currentState.block = currentState.blockObject[currentState.rotation] 
 
     // initialize current block position to start position
-    currentBlock.column = 4
-    currentBlock.row = 0
-    // tester.column = currentBlock.column
-    // tester.row = currentBlock.row
-
-    placeBlock()    
+    currentState.column = 4
+    currentState.row = 0
+    
+    placeBlockAtTop()    
 }
 
-function placeBlock(){
-    buildTestBoard()
+function placeBlockAtTop(){
+// checks for valid move: 
+// if tested block placement reveals no collision, place block on boardArray
+// if tested block placement reveals collision, GAME OVER??
+    setUpTester()
     placeBlockOnABoard(tester.board, tester)
-    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
-    let collided = checkForCollision() // if collided, return true
-    console.log(collided)
+    let collided = checkForCollision() 
+    console.log("collided? ", collided)
     if (collided === false){
-    // new block does not hit anything, so OK to place
-        placeBlockOnABoard(boardArray, currentBlock)
-        // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
+        placeBlockOnABoard(boardArray, currentState)
         renderBoard()
-        blockInPlay()
         fillNextUpArray()
-    } 
-    if (collided === true){
-        console.log("GAME OVER: ", JSON.parse(JSON.stringify(boardArray)))
+    } else {
+        startStopInterval("pause")
         gameOver = true
-        clearInterval(timerIntervalId)
         renderGameOver()
-    }
-    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
-    // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
-    // fill nextUp array
-    
-    // removeBlockOnBoard(tester.board, tester)
-    // console.log(JSON.parse(JSON.stringify(tester.board)))
-    
-}
-function buildTestBoard(){
-    tester.board = []
-    boardArray.forEach(row => {
-        tester.board.push(row.slice())
-    })
-    tester.row = currentBlock.row
-    tester.column = currentBlock.column
-    tester.block = currentBlock.block
-    tester.rotation = currentBlock.rotation
-}
-
-function placeBlockOnABoard(arr, obj){
-    for (let r = 0; r < 4; r++){
-        for (let c = 0; c < 4; c++){
-            // console.log("obj.row: ",obj.row)
-            // console.log("obj.column: ",obj.column)
-            // console.log("current block value: ", currentBlock.block[r][c])
-            arr[r + obj.row][c + obj.column] += obj.block[r][c]        
-        }
-    } 
-    // console.log("i finished the function")  
-}
-
-function checkForCollision(){
-    for (let rowArr of tester.board){
-
-        if (rowArr.includes(2)){
-            
-            return true
-        }
-    }
-
-    return false
-}
-
-function blockInPlay(){
-    timerIntervalId = setInterval(gravity, 1000)
-   
-    // while (gameOver === false){
-    //     console.log("hello")
-    //     console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-    //     // gameOver= true
-    //     placeNewBlock()
-    //     blockInPlay()
-    // }
+    }    
 }
 
 function gravity(){
-    console.log("entered gravity")
-    let collided = moveDown()
+// block is always moving down
+// if block hits the "bottom", check for lines to clear, set new block at top
+    let collided = userMove("down")
     if (collided === true){
-        // blockInMotion = false // block stops moving
-        clearInterval(timerIntervalId)
-        timerIntervalId = null
-        console.log("END OF gravity")
         checkForFullRow()
-        // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
         setUpNewBlock()
     }
-    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
 }
 
-function moveDown(){
-    buildTestBoard()
-
+function userMove(moveType){
+// tests user input move
+// if no collision with move, boardArray is updated accordingly
+// if collision occurs with move, no move occurs
+    setUpTester()
     removeBlockOnABoard(tester.board, tester)
-    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
-    tester.row += 1
+    whatMove(moveType, tester.board, tester)
     placeBlockOnABoard(tester.board, tester)
-    let collided = checkForCollision() // if collided, return true
+    let collided = checkForCollision() 
     if (collided === false){
-    // new block does not hit anything, so OK to place
-        removeBlockOnABoard(boardArray, currentBlock)
-        currentBlock.row += 1
-        placeBlockOnABoard(boardArray, currentBlock)
+        removeBlockOnABoard(boardArray, currentState)
+        whatMove(moveType, boardArray, currentState)
+        placeBlockOnABoard(boardArray, currentState)
         renderBoard()
     } 
     return collided 
@@ -350,12 +291,45 @@ function moveDown(){
 function removeBlockOnABoard(arr, obj){
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
-            if (arr[r + obj.row][c + obj.column] === currentBlock.block[r][c]){
+            if (arr[r + obj.row][c + obj.column] === currentState.block[r][c]){
                 arr[r + obj.row][c + obj.column] =0
             }
         }
     } 
 }
+/* ===== Functions used for testing and placing blocks ===== */
+function setUpTester(){
+    // set up tester board and state to imitate current
+        tester.board = []
+        boardArray.forEach(row => {
+            tester.board.push(row.slice())
+        })
+        tester.row = currentState.row
+        tester.column = currentState.column
+        tester.block = currentState.block
+        tester.rotation = currentState.rotation
+    }
+    
+    function placeBlockOnABoard(boardArr, state){
+    // places a 4x4 holding block 
+    // could be for either boardArray or testerArray 
+        for (let r = 0; r < 4; r++){
+            for (let c = 0; c < 4; c++){
+                boardArr[r + state.row][c + state.column] += state.block[r][c]        
+            }
+        } 
+    }
+    
+    function checkForCollision(){
+    // checks for a 2 on the tester board, which indicates collision
+        for (let rowArr of tester.board){
+            if (rowArr.includes(2)){
+                return true
+            } 
+        } 
+        return false
+    }
+    /* ========================================================== */
 
 function checkForFullRow(){
     for (let row = 1; row<21; row++){
@@ -366,145 +340,88 @@ function checkForFullRow(){
         }
         if (count === 12){
             linesCleared++
+            boardArray.pop(boardArray[row])
+            boardArray.splice(1,0, emptyRow.slice())
         }
     }
+    renderBoard()
 }
 
-function userLeftMovement(event){
-    buildTestBoard()
 
-    removeBlockOnABoard(tester.board, tester)
-    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
-    // console.log("current row and column: ", currentBlock.row,  currentBlock.column)
-    // console.log("tester row and column: ", tester.row,  tester.column)
-    tester.column -= 1
-    placeBlockOnABoard(tester.board, tester)
-    let collided = checkForCollision() // if collided, return true
-    console.log("collided: ", collided)
-    if (collided === false){
-    // new block does not hit anything, so OK to place
-        removeBlockOnABoard(boardArray, currentBlock)
-        currentBlock.column -= 1
-        placeBlockOnABoard(boardArray, currentBlock)
-        renderBoard()
-    } 
-}
-function userRightMovement(event){
-    buildTestBoard()
-
-    removeBlockOnABoard(tester.board, tester)
-    // console.log("tester board RM: ", JSON.parse(JSON.stringify(tester.board)))
-    // console.log("current row and column: ", currentBlock.row,  currentBlock.column)
-    // console.log("tester row and column: ", tester.row,  tester.column)
-    tester.column += 1
-    placeBlockOnABoard(tester.board, tester)
-    let collided = checkForCollision() // if collided, return true
-    console.log("collided: ", collided)
-    if (collided === false){
-    // new block does not hit anything, so OK to place
-        removeBlockOnABoard(boardArray, currentBlock)
-        currentBlock.column += 1
-        placeBlockOnABoard(boardArray, currentBlock)
-        renderBoard()
-    } else{
-        // console.log("board array RIGHT: ", JSON.parse(JSON.stringify(boardArray)))
+function whatMove(moveType, board, state){
+    switch (moveType){
+        case "down":
+            state.row += 1
+            break
+        case "left":
+            state.column -= 1
+            break
+        case "right":
+            state.column += 1
+            break
+        case "CW":
+            if (state.rotation < 3){
+                state.rotation += 1
+            } else{
+                state.rotation = 0
+            }
+            state.block = currentState.blockObject[state.rotation]
+            break
+        case "CCW":
+            if (state.rotation > 0){
+                state.rotation -= 1
+            } else{
+                state.rotation = 3
+            }
+            state.block = currentState.blockObject[state.rotation]
+            break
+        default:
+            return      
     }
-    
-}
-
-function CWRotation (){
-    buildTestBoard()
-    removeBlockOnABoard(tester.board, tester)
-
-    if (tester.rotation < 3){
-        tester.rotation += 1
-    } else{
-        tester.rotation = 0
-    }
-    tester.block = currentBlock.rotationArray[tester.rotation]
-    
-    placeBlockOnABoard(tester.board, tester)
-    let collided = checkForCollision() // if collided, return true
-    console.log("collided: ", collided)
-    if (collided === false){
-    // new block does not hit anything, so OK to place
-        removeBlockOnABoard(boardArray, currentBlock)
-        currentBlock.rotation = tester.rotation
-        currentBlock.block = currentBlock.rotationArray[currentBlock.rotation]
-        placeBlockOnABoard(boardArray, currentBlock)
-        renderBoard()
-    } else{
-        console.log("board array ROTATION: ", JSON.parse(JSON.stringify(boardArray)))
-    }
-    
-}
-function counterCWRotation (){
-    buildTestBoard()
-    removeBlockOnABoard(tester.board, tester)
-
-    if (tester.rotation > 0){
-        tester.rotation -= 1
-    } else{
-        tester.rotation = 3
-    }
-    tester.block = currentBlock.rotationArray[tester.rotation]
-    
-    placeBlockOnABoard(tester.board, tester)
-    let collided = checkForCollision() // if collided, return true
-    console.log("collided: ", collided)
-    if (collided === false){
-    // new block does not hit anything, so OK to place
-        removeBlockOnABoard(boardArray, currentBlock)
-        currentBlock.rotation = tester.rotation
-        currentBlock.block = currentBlock.rotationArray[currentBlock.rotation]
-        placeBlockOnABoard(boardArray, currentBlock)
-        renderBoard()
-    } else{
-        console.log("board array CCW ROTATION: ", JSON.parse(JSON.stringify(boardArray)))
-    }
-    
 }
  
 function hold() {
-    console.log("held block array: ",heldBlockArray)
-    console.log("heldblockarray length: ", heldBlockArray.length)
-    if (heldBlockArray[0] == undefined){
-        heldBlockArray = currentBlock.rotationArray
-        removeBlockOnABoard(boardArray, currentBlock)
-        console.log("held block array (first hold): ", JSON.parse(JSON.stringify(heldBlockArray)))
-        console.log(heldBlockArray.length)
-        gameStart()
-
+    if (holdingBlock === false){
+    // if no block is being held, assign current block to "hold" 
+        heldBlockObj = currentState.blockObject
+        removeBlockOnABoard(boardArray, currentState)
+        holdingBlock = true 
+        renderBoard()
+        setUpNewBlock()
     } else{
-        let tempArr = heldBlockArray
-        heldBlockArray = currentBlock.rotationArray
-        removeBlockOnABoard(boardArray, currentBlock)
-        currentBlock.rotationArray = tempArr
-        console.log("held block array (consec holds): ", JSON.parse(JSON.stringify(heldBlockArray)))
-        console.log("current rotation Array: ", JSON.parse(JSON.stringify(currentBlock.rotationArray)))
-        placeBlock()
+    // if a block is being held, switch current and "hold" block
+        let temp = heldBlockObj
+        heldBlockObj = currentState.blockObject
+        removeBlockOnABoard(boardArray, currentState)
+        currentState.blockObject = temp
+        currentState.block = currentState.blockObject[0]
+        currentState.column = 4
+        currentState.row = 0
+        renderBoard()
+        placeBlockAtTop()
     }
 } 
-function startPause(){
-    // Ternary operator to swap the Start to Pause and
-        // vice versa when it is pressed (so hot!)
-        startPauseButton.textContent = (startPauseButton.textContent === "Start") ? "Pause" : "Start"
-      
-      if (timerIntervalId) {
-        // this is your PAUSE ability
-        clearInterval(timerIntervalId)
-            // We have to clear the timerIntervalId to allow
-            // the ability to pause the timer
-        timerIntervalId = null
-            // you need this for the restart , start?
-        console.log("game should be paused")
-        gamePaused = true
-      } else {
-        //   
-        gamePaused = false
-        gameStart()
-      }
+
+function startStopInterval(actionStr){
+    if (actionStr === "pause") {
+      clearInterval(timerIntervalId)
+    } else if (actionStr === "start") {
+      timerIntervalId = setInterval(gravity, 1000)
     }
+  }
+
+function startPause(){
+    if (gamePaused === false && gameOver === false){
+    // if game was not paused and game is still going: pause on click
+        startStopInterval("pause")
+        gamePaused = true
+    } else if (gamePaused === true && gameOver === false){
+    // if game was already paused and game is still going: unpause
+        gamePaused = false
+        startStopInterval("start")
+    }
+}
+
 function renderBoard(){
     // console.log("you still need to create render board()")
     let index = 0;
@@ -521,17 +438,6 @@ function renderBoard(){
     }
 }
 
-// function renderBoard() {
-//     for(let i = 0; i<boardArray.length; i++){
-//         if (boardArray[i] === 1){
-//             squares[i].innerHTML = chips
-//         } else if (boardArray[i] === -1){
-//             squares[i].innerHTML = fries
-//         } else {
-//             squares[i].innerHTML = ""
-//         }
-//     }
-// }
 function renderNextUp(){
     console.log("you still need to create renderNextUp()")
 }
@@ -552,41 +458,41 @@ document.addEventListener("keydown", function(event){
         case "ArrowDown":
             console.log("down arrow - soft drop")
             if (gamePaused === false && gameOver === false){
-                moveDown()
+                userMove("down")
             }
             break;
         case "Up": // IE/Edge specific value
         case "ArrowUp":
             console.log("up arrow - CW rotation")
             if (gamePaused === false && gameOver === false){
-                CWRotation()
+                userMove("CW")
             }
             break;
         case "Left": // IE/Edge specific value
         case "ArrowLeft":
             console.log("left arrow - move left")
             if (gamePaused === false && gameOver === false){
-                userLeftMovement()
+                userMove("left")
             }
             break;
         case "Right": // IE/Edge specific value
         case "ArrowRight":
             console.log("right arrow - move right")
             if (gamePaused === false && gameOver === false){
-                userRightMovement()
+                userMove("right")
             }
             break;
     // Z, X, C
         case "z":
             console.log("Z key - CCW rotation")
             if (gamePaused === false && gameOver === false){
-                counterCWRotation()
+                userMove("CCW")
             }
             break;
         case "x":
             console.log("X key - CW rotation")
             if (gamePaused === false && gameOver === false){
-                CWRotation()
+                userMove("CW")
             }
             break;
         case "c":
@@ -611,34 +517,33 @@ startPauseButton.addEventListener("click", startPause)
 
 document.querySelector("#rotate-ccw").addEventListener("click", function(event){
     if (gamePaused === false){
-        counterCWRotation()
+        userMove("CCW")
     }
     console.log("I'M ROTATING COUNTERCLOCKWISE!!!")
 })
 document.querySelector("#rotate-cw").addEventListener("click", function(event){
     if (gamePaused === false){
-        CWRotation()
+        userMove("CW")
     }
     console.log("I'M ROTATING CLOCKWISE!!!")
 })
 document.querySelector("#move-left").addEventListener("click", function(event){
     if (gamePaused === false){
-        userLeftMovement()
+        userMove("left")
     }
     console.log("I'M MOVING LEFT!!!")
     
 })
 document.querySelector("#move-right").addEventListener("click", function(event){
     if (gamePaused === false){
-        userRightMovement()
+        userMove("right")
     }    
     console.log("I'M MOVING RIGHT!!!!!")
 })
 document.querySelector("#move-down").addEventListener("click", function(event){
     console.log("I'M MOVING DOWN!!!")
-    // console.log("board array DOWN: ", JSON.parse(JSON.stringify(boardArray)))
     if (gamePaused === false){
-        moveDown()
+        userMove("down")
     }
 })
 document.querySelector("#hold-button").addEventListener("click", function(event){

@@ -198,3 +198,113 @@ renderGameOver(){
 
 */
 
+// 
+// function moveDown(){
+//     setUpTester()
+//     removeBlockOnABoard(tester.board, tester)
+    
+//     tester.row += 1
+//     placeBlockOnABoard(tester.board, tester)
+//     let collided = checkForCollision() 
+//     if (collided === false){
+//         removeBlockOnABoard(boardArray, currentState)
+//         currentState.row += 1
+//         placeBlockOnABoard(boardArray, currentState)
+//         renderBoard()
+//     } 
+//     return collided 
+// }
+
+// function userLeftMovement(event){
+//     setUpTester()
+
+//     removeBlockOnABoard(tester.board, tester)
+//     tester.column -= 1
+//     placeBlockOnABoard(tester.board, tester)
+//     let collided = checkForCollision() // if collided, return true
+//     console.log("collided: ", collided)
+//     if (collided === false){
+//     // new block does not hit anything, so OK to place
+//         removeBlockOnABoard(boardArray, currentState)
+//         currentState.column -= 1
+//         placeBlockOnABoard(boardArray, currentState)
+//         renderBoard()
+//     } 
+// }
+// function userRightMovement(event){
+//     setUpTester()
+
+//     removeBlockOnABoard(tester.board, tester)
+//     tester.column += 1
+//     placeBlockOnABoard(tester.board, tester)
+//     let collided = checkForCollision() 
+
+//     if (collided === false){
+    
+//         removeBlockOnABoard(boardArray, currentState)
+//         currentState.column += 1
+//         placeBlockOnABoard(boardArray, currentState)
+//         renderBoard()
+//     }     
+// }
+
+// function CWRotation (){
+//     setUpTester()
+//     removeBlockOnABoard(tester.board, tester)
+
+//     if (tester.rotation < 3){
+//         tester.rotation += 1
+//     } else{
+//         tester.rotation = 0
+//     }
+//     tester.block = currentState.blockObject[tester.rotation]
+    
+//     placeBlockOnABoard(tester.board, tester)
+//     let collided = checkForCollision() 
+//     if (collided === false){
+//         removeBlockOnABoard(boardArray, currentState)
+//         currentState.rotation = tester.rotation
+//         currentState.block = currentState.blockObject[currentState.rotation]
+//         placeBlockOnABoard(boardArray, currentState)
+//         renderBoard()
+//     }  
+// }
+
+// function counterCWRotation (){
+//     setUpTester()
+//     removeBlockOnABoard(tester.board, tester)
+
+//     if (tester.rotation > 0){
+//         tester.rotation -= 1
+//     } else{
+//         tester.rotation = 3
+//     }
+//     tester.block = currentState.blockObject[tester.rotation]
+    
+//     placeBlockOnABoard(tester.board, tester)
+//     let collided = checkForCollision() 
+//     if (collided === false){
+//         removeBlockOnABoard(boardArray, currentState)
+//         currentState.rotation = tester.rotation
+//         currentState.block = currentState.blockObject[currentState.rotation]
+//         placeBlockOnABoard(boardArray, currentState)
+//         renderBoard()
+//     } 
+    
+// }
+
+// function renderBoard() {
+//     for(let i = 0; i<boardArray.length; i++){
+//         if (boardArray[i] === 1){
+//             squares[i].innerHTML = chips
+//         } else if (boardArray[i] === -1){
+//             squares[i].innerHTML = fries
+//         } else {
+//             squares[i].innerHTML = ""
+//         }
+//     }
+// }
+
+// function blockInPlay(){
+//     timerIntervalId = setInterval(gravity, 1000)
+// }
