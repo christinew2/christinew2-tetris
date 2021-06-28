@@ -21,6 +21,8 @@ html {
     --background: white;
     --background-image: linear-gradient(to left bottom, #ffffff, #f7f7f7, #f0f0f0, #e8e8e8, #e1e1e1);
 
+  
+
   }
 
   .dark {
@@ -39,6 +41,7 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-content: center;
   /* Use a system font, if none are available use an available sans-sarif   font */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -111,5 +114,22 @@ html {
     justify-content: center;
     text-align: center;
   }  
+
+
+  @media only screen and (min-width: 768px){
+    body{
+      background-size: 300% 300%;
+    }
+    #board-container {
+      grid-template-rows: repeat(20, 3vw);
+      grid-template-columns: repeat(10, 3vw);
+      
+    }
+  }
+
+  @media only screen and (min-width: 1024px){
+    
+  }
+
 
   

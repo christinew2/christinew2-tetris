@@ -181,6 +181,7 @@ function createDOMBoard(){
 }
 
 function init(){
+    
     gameOver = false
     collided = false
     gamePaused = true
@@ -451,6 +452,7 @@ function renderGameOver(){
 }
 
 /*------------------------- Day/Night Theme Handlers -----------------------------*/
+
 function setTheme(theme){
     localStorage.setItem("theme", theme)
     document.documentElement.className = theme
