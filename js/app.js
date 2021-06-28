@@ -212,7 +212,7 @@ function createBoardArray(){
 
 function gameStart(){
 // function is called by game start listener
-    while (nextUp.length < 4){
+    while (nextUp.length < 3){
         fillNextUpArray()
     }
     setUpNewBlock()
@@ -457,12 +457,11 @@ function setTheme(theme){
 }
 
 function toggleTheme(){
-    localStorage.getItem("theme") === "theme-light" ?
-    setTheme("theme-dark")
+    localStorage.getItem("theme") === "light" ?
+    setTheme("dark")
     :
-        setTheme("theme-light");
+        setTheme("light");
 }
-toggleTheme()
 
 /*----------------------------- Event Listeners --------------------------------*/
 // keyboard input

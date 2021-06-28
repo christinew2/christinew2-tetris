@@ -17,18 +17,25 @@ html {
     font-size: 62.5%
   }
   
-  .theme-light {
+  .light {
     --background: white;
+    --background-image: linear-gradient(to left bottom, #ffffff, #f7f7f7, #f0f0f0, #e8e8e8, #e1e1e1);
+
   }
 
-  .theme-dark {
+  .dark {
     --background: black;
+    --background-image: linear-gradient(to right top, #303030, #404040, #525252, #646464, #767676);
 
   }
 
   body {
     text-align: center;
     background-color: var(--background);
+    background-image: var(--background-image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 150% 150%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,21 +59,45 @@ html {
   #settings-container {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-evenly;
-    align-items: baseline;
+    justify-content:space-between;
+    align-items: flex-start;
     text-align: center;
   }
 
-
   #status-container,
   #button-container{
-    max-width: calc(10 * 4.5vmin);
+    margin-bottom: 2vmin;
+    margin-top: 2vmin;
+    width: 80%;
   }
-  
+
+  .sidebar-title{
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  #number{
+    padding: 1vmin 1vmin 1vmin 1vmin;
+    font-weight: bold;
+    font-size: 2rem;
+  }
+
+  .block-holder{
+    padding: 1vmin 1vmin 1vmin 1vmin;
+    border: 0.5px solid black;
+  }
+
+  #next-block-container{
+    display: flex;
+    flex-flow: row nowrap;
+  }
+  #next-block-container > div{
+    margin-left: 1vmin;
+  }
+
   #board-container {
     display: inline-grid;
-    grid-template-rows: repeat(20, 4.5vmin);
-    grid-template-columns: repeat(10, 4.5vmin);
+    grid-template-rows: repeat(20, 6vw);
+    grid-template-columns: repeat(10, 6vw);
     grid-gap: 0vmin;
     border: 1px solid black;
     justify-content: center;
@@ -76,5 +107,9 @@ html {
   #board-container > div {
     border-right: 0.1rem solid rgb(203, 203, 203);
     border-bottom: 0.1rem solid rgb(203, 203, 203);
+    align-content: center;
+    justify-content: center;
+    text-align: center;
   }  
+
   
