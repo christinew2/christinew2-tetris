@@ -331,59 +331,63 @@ function setUpTester(){
     }
     /* ========================================================== */
 
-function checkForFullRow(){
-    for (let row = 1; row<21; row++){
-    // check for full rows, excluding borders
-        let count = 0
-        for (let element of boardArray[row]){
-            count += element
-        }
-        if (count === 12){
-            linesCleared++
-            boardArray.pop(boardArray[row])
-            boardArray.splice(1,0, emptyRow.slice())
-        }
-    }
-    renderBoard()
-}
-
-
-function whatMove(moveType, board, state){
-    switch (moveType){
+    
+    
+    function whatMove(moveType, board, state){
+        switch (moveType){
         case "down":
             state.row += 1
             break
         case "left":
             state.column -= 1
             break
-        case "right":
-            state.column += 1
-            break
-        case "CW":
-            if (state.rotation < 3){
-                state.rotation += 1
-            } else{
-                state.rotation = 0
-            }
+            case "right":
+                state.column += 1
+                break
+                case "CW":
+                    if (state.rotation < 3){
+                        state.rotation += 1
+                    } else{
+                        state.rotation = 0
+                    }
+                    state.block = currentState.blockObject[state.rotation]
+                    break
+                    case "CCW":
+                        if (state.rotation > 0){
+                            state.rotation -= 1
+                        } else{
+                            state.rotation = 3
+                        }
             state.block = currentState.blockObject[state.rotation]
             break
-        case "CCW":
-            if (state.rotation > 0){
-                state.rotation -= 1
-            } else{
-                state.rotation = 3
-            }
-            state.block = currentState.blockObject[state.rotation]
-            break
-        default:
-            return      
+            default:
+                return      
+        }
     }
-}
- 
+        
+    function checkForFullRow(){
+        for (let row = 1; row<21; row++){
+        // check for full rows, excluding borders
+            let count = 0
+            for (let i = 0; i<boardArray[row].length; i++){
+                count += boardArray[row][i]
+                console.log(count)
+                if (count === 12){
+                    console.log(boardArray[row])
+                    linesCleared++
+                    boardArray.pop(boardArray[row])
+                    boardArray.splice(1,0, emptyRow.slice())
+                    console.log(linesCleared)
+                }
+            }
+        }
+        renderBoard()
+    }
+
 function hold() {
     if (holdingBlock === false){
     // if no block is being held, assign current block to "hold" 
-        heldBlockObj = currentState.blockObject
+    heldBlockObj = currentState.blockObject
         removeBlockOnABoard(boardArray, currentState)
         holdingBlock = true 
         renderBoard()
