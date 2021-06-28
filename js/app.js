@@ -143,7 +143,6 @@ const tBlock = {
         [0,1,0,0]],
 }
 
-
 /*------------------------------- Constants --------------------------------*/
 const emptyRow = [1,0,0,0,0,0,0,0,0,0,0,1] // 10 playable squares + 1 border square on each side
 const fullRow = [1,1,1,1,1,1,1,1,1,1,1,1] // used for top and bottom borders
@@ -158,136 +157,16 @@ let heldBlockArray = []
 /*------------------------- Cached Element References --------------------------*/
 const board = document.querySelector("#board-container")
 const startPauseButton = document.querySelector("#start-pause")
-const squares = document.querySelectorAll("#board-container > div")
-
-
 const form = document.querySelector("form")
 
-/*----------------------------- Event Listeners --------------------------------*/
-// keyboard input
-document.addEventListener("keydown", function(event){
-    if(event.defaultPrevented){
-        return; // do nothing if event already handled  ******************** check on this??
-    }
-    switch (event.key) {
-    // arrow keys
-        case "Down": // IE/Edge specific value
-        case "ArrowDown":
-            console.log("down arrow - soft drop")
-            if (gamePaused === false){
-                moveDown()
-            }
-            break;
-        case "Up": // IE/Edge specific value
-        case "ArrowUp":
-            console.log("up arrow - CW rotation")
-            if (gamePaused === false){
-                CWRotation()
-            }
-            break;
-        case "Left": // IE/Edge specific value
-        case "ArrowLeft":
-            console.log("left arrow - move left")
-            if (gamePaused === false){
-                userLeftMovement()
-            }
-            break;
-        case "Right": // IE/Edge specific value
-        case "ArrowRight":
-            console.log("right arrow - move right")
-            if (gamePaused === false){
-                userRightMovement()
-            }
-            break;
-    // Z, X, C
-        case "z":
-            console.log("Z key - CCW rotation")
-            if (gamePaused === false){
-                counterCWRotation()
-            }
-            break;
-        case "x":
-            console.log("X key - CW rotation")
-            if (gamePaused === false){
-                CWRotation()
-            }
-            break;
-        case "c":
-            console.log("C key - hold")
-            if (gamePaused === false){
-                hold()
-            }
-            break;
-    // Esc
-        case "Esc": // IE/Edge specific value
-        case "Escape":
-            console.log("esc button - pause")
-            startPause()
-            break;
-        default:
-          return; // Quit when this doesn't handle the key event.
-      }
-})
-// buttons for mobile
 
-startPauseButton.addEventListener("click", startPause)
-
-document.querySelector("#rotate-ccw").addEventListener("click", function(event){
-    if (gamePaused === false){
-        counterCWRotation()
-    }
-    console.log("I'M ROTATING COUNTERCLOCKWISE!!!")
-})
-document.querySelector("#rotate-cw").addEventListener("click", function(event){
-    if (gamePaused === false){
-        CWRotation()
-    }
-    console.log("I'M ROTATING CLOCKWISE!!!")
-})
-document.querySelector("#move-left").addEventListener("click", function(event){
-    if (gamePaused === false){
-        userLeftMovement()
-    }
-    console.log("I'M MOVING LEFT!!!")
-    
-})
-document.querySelector("#move-right").addEventListener("click", function(event){
-    if (gamePaused === false){
-        userRightMovement()
-    }    
-    console.log("I'M MOVING RIGHT!!!!!")
-})
-document.querySelector("#move-down").addEventListener("click", function(event){
-    console.log("I'M MOVING DOWN!!!")
-    // console.log("board array DOWN: ", JSON.parse(JSON.stringify(boardArray)))
-    if (gamePaused === false){
-        moveDown()
-    }
-})
-document.querySelector("#hold-button").addEventListener("click", function(event){
-    console.log("I'M HOLDING A BLOCK")
-    if (gamePaused === false){
-        hold()
-    }
-})
-// settings
-document.querySelector("#light-dark-mode").addEventListener("click", function(event){
-    console.log(event.target.id)
-})
-document.querySelector("#settings").addEventListener("click", function(event){
-    console.log(event.target.id)
-})
-document.querySelector("#controls-panel").addEventListener("click", function(event){
-    console.log(event.target.id)
-})
-form.addEventListener("reset", init) 
 
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
 /*-------------------------------- Functions --------------------------------*/
+createDOMBoard()
 init()
 
 function init(){
-    createDOMBoard()
     gameOver = false
     blockInMotion = false
     collided = false
@@ -304,11 +183,12 @@ function init(){
 function createDOMBoard(){
     for (cell = 0; cell < (20 * 10); cell++) {
       let square = document.createElement("div");
-      square.innerText = cell;
+    //   square.innerText = cell;
       square.classList.add("square")
       board.appendChild(square)
     }
 }
+
 function createBoard(){
 // note: slice is needed so that a new copy of the emptyRow/fullRow arrays is pushed onto the boardArray, rather than just a reference to the same array (this affects accessing elements in the array)
     boardArray.push(fullRow.slice()) // top border
@@ -423,7 +303,7 @@ function checkForCollision(){
 }
 
 function blockInPlay(){
-    timerIntervalId = setInterval(gravity, 100)
+    timerIntervalId = setInterval(gravity, 1000)
    
     // while (gameOver === false){
     //     console.log("hello")
@@ -588,11 +468,13 @@ function counterCWRotation (){
 function hold() {
     console.log("held block array: ",heldBlockArray)
     console.log("heldblockarray length: ", heldBlockArray.length)
-    if (heldBlockArray.length === 0){
+    if (heldBlockArray[0] == undefined){
         heldBlockArray = currentBlock.rotationArray
         removeBlockOnABoard(boardArray, currentBlock)
         console.log("held block array (first hold): ", JSON.parse(JSON.stringify(heldBlockArray)))
+        console.log(heldBlockArray.length)
         gameStart()
+
     } else{
         let tempArr = heldBlockArray
         heldBlockArray = currentBlock.rotationArray
@@ -620,15 +502,36 @@ function startPause(){
       } else {
         //   
         gamePaused = false
-        gameStart();
+        gameStart()
       }
     }
 function renderBoard(){
     // console.log("you still need to create render board()")
-    console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-
+    let index = 0;
+    for (let rows = 1; rows <= 20; rows++){
+    // exclude the borders
+        for (let col = 1; col < 11; col++){
+            if (boardArray[rows][col] === 1){
+                board.children[index].innerText = "X"
+            } else{
+                board.children[index].innerText = ""
+            }
+            index++
+        }
+    }
 }
 
+// function renderBoard() {
+//     for(let i = 0; i<boardArray.length; i++){
+//         if (boardArray[i] === 1){
+//             squares[i].innerHTML = chips
+//         } else if (boardArray[i] === -1){
+//             squares[i].innerHTML = fries
+//         } else {
+//             squares[i].innerHTML = ""
+//         }
+//     }
+// }
 function renderNextUp(){
     console.log("you still need to create renderNextUp()")
 }
@@ -636,3 +539,122 @@ function renderNextUp(){
 function renderGameOver(){
     console.log("GAME IS OVER")
 }
+
+/*----------------------------- Event Listeners --------------------------------*/
+// keyboard input
+document.addEventListener("keydown", function(event){
+    if(event.defaultPrevented){
+        return; // do nothing if event already handled  ******************** check on this??
+    }
+    switch (event.key) {
+    // arrow keys
+        case "Down": // IE/Edge specific value
+        case "ArrowDown":
+            console.log("down arrow - soft drop")
+            if (gamePaused === false && gameOver === false){
+                moveDown()
+            }
+            break;
+        case "Up": // IE/Edge specific value
+        case "ArrowUp":
+            console.log("up arrow - CW rotation")
+            if (gamePaused === false && gameOver === false){
+                CWRotation()
+            }
+            break;
+        case "Left": // IE/Edge specific value
+        case "ArrowLeft":
+            console.log("left arrow - move left")
+            if (gamePaused === false && gameOver === false){
+                userLeftMovement()
+            }
+            break;
+        case "Right": // IE/Edge specific value
+        case "ArrowRight":
+            console.log("right arrow - move right")
+            if (gamePaused === false && gameOver === false){
+                userRightMovement()
+            }
+            break;
+    // Z, X, C
+        case "z":
+            console.log("Z key - CCW rotation")
+            if (gamePaused === false && gameOver === false){
+                counterCWRotation()
+            }
+            break;
+        case "x":
+            console.log("X key - CW rotation")
+            if (gamePaused === false && gameOver === false){
+                CWRotation()
+            }
+            break;
+        case "c":
+            console.log("C key - hold")
+            if (gamePaused === false && gameOver === false){
+                hold()
+            }
+            break;
+    // Esc
+        case "Esc": // IE/Edge specific value
+        case "Escape":
+            console.log("esc button - pause")
+            startPause()
+            break;
+        default:
+          return; // Quit when this doesn't handle the key event.
+      }
+})
+// buttons for mobile
+
+startPauseButton.addEventListener("click", startPause)
+
+document.querySelector("#rotate-ccw").addEventListener("click", function(event){
+    if (gamePaused === false){
+        counterCWRotation()
+    }
+    console.log("I'M ROTATING COUNTERCLOCKWISE!!!")
+})
+document.querySelector("#rotate-cw").addEventListener("click", function(event){
+    if (gamePaused === false){
+        CWRotation()
+    }
+    console.log("I'M ROTATING CLOCKWISE!!!")
+})
+document.querySelector("#move-left").addEventListener("click", function(event){
+    if (gamePaused === false){
+        userLeftMovement()
+    }
+    console.log("I'M MOVING LEFT!!!")
+    
+})
+document.querySelector("#move-right").addEventListener("click", function(event){
+    if (gamePaused === false){
+        userRightMovement()
+    }    
+    console.log("I'M MOVING RIGHT!!!!!")
+})
+document.querySelector("#move-down").addEventListener("click", function(event){
+    console.log("I'M MOVING DOWN!!!")
+    // console.log("board array DOWN: ", JSON.parse(JSON.stringify(boardArray)))
+    if (gamePaused === false){
+        moveDown()
+    }
+})
+document.querySelector("#hold-button").addEventListener("click", function(event){
+    console.log("I'M HOLDING A BLOCK")
+    if (gamePaused === false){
+        hold()
+    }
+})
+// settings
+document.querySelector("#light-dark-mode").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#settings").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+document.querySelector("#controls-panel").addEventListener("click", function(event){
+    console.log(event.target.id)
+})
+form.addEventListener("reset", init) 
