@@ -15,6 +15,7 @@ const tester = {
     block: null,
     rotation: null,  // check if this is necessary
 }
+
 const lBlock = {
     0: [[0,0,0,0],
         [0,0,1,0],
@@ -149,12 +150,15 @@ const fullRow = [1,1,1,1,1,1,1,1,1,1,1,1] // used for top and bottom borders
 const allBlocks = [lBlock, reverseLBlock, square, iBlock, zBlock, reverseZBlock, tBlock]
 
 /*------------------------------- Variables --------------------------------*/
-let gameOver, blockInMotion, linesCleared, timerIntervalId
+let gameOver, gamePaused, blockInMotion, linesCleared, timerIntervalId
 let nextUp = []
 let boardArray = []
+let heldBlockArray = []
 
 /*------------------------- Cached Element References --------------------------*/
-const board = document.querySelector(".board-container")
+const board = document.querySelector("#board-container")
+const startPauseButton = document.querySelector("#start-pause")
+const squares = document.querySelectorAll("#board-container > div")
 
 
 const form = document.querySelector("form")
@@ -169,62 +173,102 @@ document.addEventListener("keydown", function(event){
     // arrow keys
         case "Down": // IE/Edge specific value
         case "ArrowDown":
-          console.log("down arrow - soft drop")
-          break;
+            console.log("down arrow - soft drop")
+            if (gamePaused === false){
+                moveDown()
+            }
+            break;
         case "Up": // IE/Edge specific value
         case "ArrowUp":
             console.log("up arrow - CW rotation")
-          break;
+            if (gamePaused === false){
+                CWRotation()
+            }
+            break;
         case "Left": // IE/Edge specific value
         case "ArrowLeft":
             console.log("left arrow - move left")
+            if (gamePaused === false){
+                userLeftMovement()
+            }
             break;
         case "Right": // IE/Edge specific value
         case "ArrowRight":
             console.log("right arrow - move right")
+            if (gamePaused === false){
+                userRightMovement()
+            }
             break;
     // Z, X, C
         case "z":
             console.log("Z key - CCW rotation")
+            if (gamePaused === false){
+                counterCWRotation()
+            }
             break;
         case "x":
             console.log("X key - CW rotation")
+            if (gamePaused === false){
+                CWRotation()
+            }
             break;
         case "c":
             console.log("C key - hold")
+            if (gamePaused === false){
+                hold()
+            }
             break;
     // Esc
         case "Esc": // IE/Edge specific value
         case "Escape":
             console.log("esc button - pause")
+            startPause()
             break;
         default:
           return; // Quit when this doesn't handle the key event.
       }
 })
 // buttons for mobile
-document.querySelector("#start").addEventListener("click", gameStart)
+
+startPauseButton.addEventListener("click", startPause)
+
 document.querySelector("#rotate-ccw").addEventListener("click", function(event){
-    counterCWRotation()
+    if (gamePaused === false){
+        counterCWRotation()
+    }
     console.log("I'M ROTATING COUNTERCLOCKWISE!!!")
 })
 document.querySelector("#rotate-cw").addEventListener("click", function(event){
-    CWRotation()
+    if (gamePaused === false){
+        CWRotation()
+    }
     console.log("I'M ROTATING CLOCKWISE!!!")
 })
 document.querySelector("#move-left").addEventListener("click", function(event){
-    userLeftMovement()
+    if (gamePaused === false){
+        userLeftMovement()
+    }
     console.log("I'M MOVING LEFT!!!")
     
 })
 document.querySelector("#move-right").addEventListener("click", function(event){
-    userRightMovement()
+    if (gamePaused === false){
+        userRightMovement()
+    }    
     console.log("I'M MOVING RIGHT!!!!!")
 })
 document.querySelector("#move-down").addEventListener("click", function(event){
     console.log("I'M MOVING DOWN!!!")
     // console.log("board array DOWN: ", JSON.parse(JSON.stringify(boardArray)))
-    moveDown()
+    if (gamePaused === false){
+        moveDown()
+    }
+})
+document.querySelector("#hold-button").addEventListener("click", function(event){
+    console.log("I'M HOLDING A BLOCK")
+    if (gamePaused === false){
+        hold()
+    }
 })
 // settings
 document.querySelector("#light-dark-mode").addEventListener("click", function(event){
@@ -243,17 +287,28 @@ form.addEventListener("reset", init)
 init()
 
 function init(){
+    createDOMBoard()
     gameOver = false
     blockInMotion = false
     collided = false
+    gamePaused = false
     linesCleared = 0
     boardArray = []
     timerIntervalId = null
     tester.board = []
     nextUp = []
+    heldBlock = []
     createBoard()
 }
 
+function createDOMBoard(){
+    for (cell = 0; cell < (20 * 10); cell++) {
+      let square = document.createElement("div");
+      square.innerText = cell;
+      square.classList.add("square")
+      board.appendChild(square)
+    }
+}
 function createBoard(){
 // note: slice is needed so that a new copy of the emptyRow/fullRow arrays is pushed onto the boardArray, rather than just a reference to the same array (this affects accessing elements in the array)
     boardArray.push(fullRow.slice()) // top border
@@ -265,6 +320,8 @@ function createBoard(){
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
+
+    renderBoard()
 }
 
 function gameStart(){
@@ -273,7 +330,7 @@ function gameStart(){
         fillNextUpArray()
     }
     
-    placeNewBlock()
+    setUpNewBlock()
 }
 
 function fillNextUpArray(){
@@ -284,7 +341,7 @@ function fillNextUpArray(){
     renderNextUp()
 }
 
-function placeNewBlock(){
+function setUpNewBlock(){
     // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
     // blockInMotion = true
     currentBlock.rotationArray = nextUp.shift()
@@ -298,6 +355,10 @@ function placeNewBlock(){
     // tester.column = currentBlock.column
     // tester.row = currentBlock.row
 
+    placeBlock()    
+}
+
+function placeBlock(){
     buildTestBoard()
     placeBlockOnABoard(tester.board, tester)
     // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
@@ -309,19 +370,22 @@ function placeNewBlock(){
         // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
         renderBoard()
         blockInPlay()
-    } else {
+        fillNextUpArray()
+    } 
+    if (collided === true){
         console.log("GAME OVER: ", JSON.parse(JSON.stringify(boardArray)))
         gameOver = true
-        
+        clearInterval(timerIntervalId)
+        renderGameOver()
     }
     // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
     // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
     // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
     // fill nextUp array
-    fillNextUpArray()
+    
     // removeBlockOnBoard(tester.board, tester)
     // console.log(JSON.parse(JSON.stringify(tester.board)))
-
+    
 }
 function buildTestBoard(){
     tester.board = []
@@ -359,7 +423,7 @@ function checkForCollision(){
 }
 
 function blockInPlay(){
-    timerIntervalId = setInterval(gravity, 1000)
+    timerIntervalId = setInterval(gravity, 100)
    
     // while (gameOver === false){
     //     console.log("hello")
@@ -380,7 +444,7 @@ function gravity(){
         console.log("END OF gravity")
         checkForFullRow()
         // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-        placeNewBlock()
+        setUpNewBlock()
     }
     // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
 }
@@ -521,6 +585,44 @@ function counterCWRotation (){
     
 }
  
+function hold() {
+    console.log("held block array: ",heldBlockArray)
+    console.log("heldblockarray length: ", heldBlockArray.length)
+    if (heldBlockArray.length === 0){
+        heldBlockArray = currentBlock.rotationArray
+        removeBlockOnABoard(boardArray, currentBlock)
+        console.log("held block array (first hold): ", JSON.parse(JSON.stringify(heldBlockArray)))
+        gameStart()
+    } else{
+        let tempArr = heldBlockArray
+        heldBlockArray = currentBlock.rotationArray
+        removeBlockOnABoard(boardArray, currentBlock)
+        currentBlock.rotationArray = tempArr
+        console.log("held block array (consec holds): ", JSON.parse(JSON.stringify(heldBlockArray)))
+        console.log("current rotation Array: ", JSON.parse(JSON.stringify(currentBlock.rotationArray)))
+        placeBlock()
+    }
+} 
+function startPause(){
+    // Ternary operator to swap the Start to Pause and
+        // vice versa when it is pressed (so hot!)
+        startPauseButton.textContent = (startPauseButton.textContent === "Start") ? "Pause" : "Start"
+      
+      if (timerIntervalId) {
+        // this is your PAUSE ability
+        clearInterval(timerIntervalId)
+            // We have to clear the timerIntervalId to allow
+            // the ability to pause the timer
+        timerIntervalId = null
+            // you need this for the restart , start?
+        console.log("game should be paused")
+        gamePaused = true
+      } else {
+        //   
+        gamePaused = false
+        gameStart();
+      }
+    }
 function renderBoard(){
     // console.log("you still need to create render board()")
     console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
@@ -529,4 +631,8 @@ function renderBoard(){
 
 function renderNextUp(){
     console.log("you still need to create renderNextUp()")
+}
+
+function renderGameOver(){
+    console.log("GAME IS OVER")
 }
