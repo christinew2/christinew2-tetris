@@ -156,6 +156,7 @@ let heldBlockObj = []
 
 /*------------------------- Cached Element References --------------------------*/
 const board = document.querySelector("#board-container")
+const nextUpContainer = document.querySelector("#next-block-container")
 const startPauseButton = document.querySelector("#start-pause")
 const form = document.querySelector("form")
 
@@ -169,14 +170,29 @@ const form = document.querySelector("form")
     // console.log(JSON.parse(JSON.stringify(tester.board)))
 /*-------------------------------- Functions --------------------------------*/
 createDOMBoard()
+createNextUpSpaces()
 init()
 
 // On-screen game board set up
 function createDOMBoard(){
-    for (cell = 0; cell < (20 * 10); cell++) {
+    for (let cell = 0; cell < (20 * 10); cell++) {
       let square = document.createElement("div")
       square.classList.add("square")
       board.appendChild(square)
+    }
+}
+function createNextUpSpaces(){
+// create 3 nextUp containers that contain 4x4 arrays to store nextUp blocks
+    for (let b = 1; b < 4; b ++){
+        let box = document.createElement("div")
+        box.classList.add(`next-box-${b}`, "block-holder")
+        nextUpContainer.appendChild(box)
+        let nextUpBox = document.querySelector(`.next-box-${b}`)
+        for (let c = 0; c < (4*4); c++) {
+          let cell = document.createElement("div")
+          cell.classList.add("nextUpCells")
+          nextUpBox.appendChild(cell)
+        }
     }
 }
 
