@@ -160,6 +160,7 @@ const board = document.querySelector("#board-container")
 const nextUpContainer = document.querySelector("#next-block-container")
 const holdContainer = document.querySelector("#hold")
 const startPauseButton = document.querySelector("#start-pause")
+const linesClearedDisplay = document.querySelector("#number")
 const form = document.querySelector("form")
 
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
@@ -222,6 +223,8 @@ function init(){
     nextUpBlock = []
     nextUpList = []
     heldBlock = []
+    
+    linesClearedDisplay.innerText = "0"
     createBoardArray()
 }
 
@@ -410,6 +413,7 @@ function setUpTester(){
                 if (count === 12){
                     console.log(boardArray[row])
                     linesCleared++
+                    displayLinesCleared()
                     boardArray.pop(boardArray[row])
                     boardArray.splice(1,0, emptyRow.slice())
                     console.log(linesCleared)
@@ -459,6 +463,14 @@ function startPause(){
     // if game was already paused and game is still going: unpause
         gamePaused = false
         startStopInterval("start")
+    }
+}
+
+function displayLinesCleared(){
+    if (linesCleared < 10){
+        linesClearedDisplay.innerText = `0${linesCleared}`
+    } else{
+        linesClearedDisplay.innerText = `${linesCleared}`
     }
 }
 
