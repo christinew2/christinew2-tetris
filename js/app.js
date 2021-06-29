@@ -422,7 +422,7 @@ function setUpTester(){
 function hold() {
     if (holdingBlock === false){
     // if no block is being held, assign current block to "hold" 
-    heldBlockObj = currentState.blockObject
+        heldBlockObj = currentState.blockObject
         removeBlockOnABoard(boardArray, currentState)
         holdingBlock = true 
         renderBoard()
@@ -439,6 +439,7 @@ function hold() {
         renderBoard()
         placeBlockAtTop()
     }
+    renderHold()
 } 
 
 function startStopInterval(actionStr){
@@ -491,6 +492,22 @@ function renderNextUp(){
                 }
                 index ++
             }
+        }
+    }
+}
+
+function renderHold(){
+    let index = 0;
+    let heldBlock = heldBlockObj[0]
+    let holdBox = document.querySelector("#hold")
+    for (let rows = 0; rows < 4; rows ++){
+        for (let col = 0; col < 4; col ++){
+            if (heldBlock[rows][col] === 1){
+                holdBox.children[index].innerText = "X"
+            } else{
+                holdBox.children[index].innerText = ""
+            }
+            index ++
         }
     }
 }
