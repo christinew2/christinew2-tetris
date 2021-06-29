@@ -21,6 +21,14 @@ html {
     --background: white;
     --background-image: linear-gradient(to left bottom, #ffffff, #f7f7f7, #f0f0f0, #e8e8e8, #e1e1e1);
 
+    --i-block-color: red;
+    --l-block-color: orange;
+    --reverse-l-block-color: yellow;
+    --square-block-color: green;
+    --z-block-color: blue;
+    --reverse-z-block-color: purple;
+    --t-block-color: violet;
+
   
 
   }

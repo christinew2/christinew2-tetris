@@ -212,7 +212,6 @@ function createHoldSpace(){
 }
 
 function init(){
-    
     gameOver = false
     collided = false
     gamePaused = true
@@ -224,6 +223,7 @@ function init(){
     nextUpList = []
     heldBlock = []
 
+    startPauseButton.innerText = "Start"
     linesClearedDisplay.innerText = "0"
     createBoardArray()
 }
@@ -351,11 +351,20 @@ function setUpTester(){
     function placeBlockOnABoard(boardArr, state){
     // places a 4x4 holding block 
     // could be for either boardArray or testerArray 
-        for (let r = 0; r < 4; r++){
-            for (let c = 0; c < 4; c++){
-                boardArr[r + state.row][c + state.column] += state.block[r][c]        
-            }
-        } 
+        if (state === currentState){
+            for (let r = 0; r < 4; r++){
+                for (let c = 0; c < 4; c++){
+                    boardArr[r + state.row][c + state.column] += state.block[r][c] 
+
+                }
+            } 
+        } else{
+            for (let r = 0; r < 4; r++){
+                for (let c = 0; c < 4; c++){
+                    boardArr[r + state.row][c + state.column] += state.block[r][c]        
+                }
+            } 
+        }
     }
     
     function checkForCollision(){
@@ -448,9 +457,11 @@ function hold() {
 
 function startStopInterval(actionStr){
     if (actionStr === "pause") {
-      clearInterval(timerIntervalId)
+        startPauseButton.innerText = "Start"
+        clearInterval(timerIntervalId)
     } else if (actionStr === "start") {
-      timerIntervalId = setInterval(gravity, 1000)
+        startPauseButton.innerText = "Pause"
+        timerIntervalId = setInterval(gravity, 1000)
     }
   }
 
@@ -473,6 +484,7 @@ function displayLinesCleared(){
         linesClearedDisplay.innerText = `${linesCleared}`
     }
 }
+
 
 function renderBoard(){
     // console.log("you still need to create render board()")
@@ -662,4 +674,8 @@ document.querySelector("#settings").addEventListener("click", function(event){
 document.querySelector("#controls-panel").addEventListener("click", function(event){
     console.log(event.target.id)
 })
-form.addEventListener("reset", init) 
+document.querySelector("#reset-button").addEventListener("click", function(event){
+    startStopInterval("pause")
+    init()
+    startStopInterval("start")
+})
