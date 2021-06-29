@@ -174,6 +174,7 @@ const linesClearedDisplay = document.querySelector("#number")
 setUpDOM()
 init()
 
+/* ============================SET UP FUNCTIONS=============================== */
 function setUpDOM(){
     createDOMBoard()
     createNextUpSpaces()
@@ -190,7 +191,7 @@ function createDOMBoard(){
 }
 function createNextUpSpaces(){
 // create 3 nextUp containers that contain 4x4 arrays to store nextUp blocks
-    for (let b = 1; b < 4; b ++){
+    for (let b = 0; b < 3; b ++){
         let box = document.createElement("div")
         box.classList.add(`next-box-${b}`, "block-holder")
         nextUpContainer.appendChild(box)
@@ -210,6 +211,7 @@ function createHoldSpace(){
     }
 }
 
+/* ==============================GAME FUNCTIONS=============================== */
 function init(){
     gameOver = false
     collided = false
@@ -228,8 +230,7 @@ function init(){
 }
 
 function createBoardArray(){
-// creates board array used for logic
-// standard tetris board is w10 x h20
+// creates board array used for logic (standard tetris board is w10 x h20)
 // board array consists of 1 top border and 3 bottom borders used for testing valid moves - borders are not rendered on DOM 
 // note: slice is needed so that a new copy of the emptyRow/fullRow arrays is pushed onto the boardArray, rather than just a reference to the same array (this affects accessing elements in the array)
     
@@ -326,13 +327,14 @@ function userMove(moveType){
 }
 
 function removeBlockOnABoard(boardArr, state){
+    let blktype = determineBlockType()
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
             if (boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
                 boardArr[r + state.row][c + state.column] =0
                 if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
                     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                    board.children[squareNum].className = `square ${squareNum}`
+                    board.children[squareNum].classList.remove(`${blktype}`)
                 }
             }
         }
@@ -361,8 +363,8 @@ function placeBlockOnABoard(boardArr, state){
                 boardArr[r + state.row][c + state.column] += state.block[r][c] 
                 if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
                     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                    console.log(squareNum)
-                    board.children[squareNum].className = `square ${squareNum} ${blktype}`   
+                    
+                    board.children[squareNum].classList.add(`${blktype}`)
 
                 }
             }
@@ -531,9 +533,9 @@ function renderBoard(){
 }
 
 function renderNextUp(){
-    for (let box = 1; box < 4; box ++){
+    for (let box = 0; box < 3; box ++){
         let index = 0;
-        let nextUpBlock = nextUpList[box-1][0]
+        let nextUpBlock = nextUpList[box][0]
         let nextUpBox = document.querySelector(`.next-box-${box}`)
         let blktype = determineBlockType(0, nextUpBlock)
         console.log(blktype)
@@ -541,7 +543,8 @@ function renderNextUp(){
             for (let col = 0; col < 4; col ++){
                 if (nextUpBlock[rows][col] === 1){
                     nextUpBox.children[index].innerText = "X"
-                    nextUpBox.children[index].className = `nextUpCell ${blktype}`
+                    nextUpBox.children[index].className = "nextUpCell"
+                    nextUpBox.children[index].classList.add(`${blktype}`)
                 } else{
                     nextUpBox.children[index].innerText = ""
                     nextUpBox.children[index].className = "nextUpCell"
@@ -561,7 +564,7 @@ function renderHold(){
         for (let col = 0; col < 4; col ++){
             if (heldBlock[rows][col] === 1){
                 holdBox.children[index].innerText = "X"
-                holdBox.children[index].className = `holdCell ${blktype}` 
+                holdBox.children[index].classList.add(`${blktype}`)
             } else{
                 holdBox.children[index].innerText = ""
                 holdBox.children[index].className = "holdCell"
