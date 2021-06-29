@@ -150,13 +150,15 @@ const allBlocks = [lBlock, reverseLBlock, square, iBlock, zBlock, reverseZBlock,
 
 /*------------------------------- Variables --------------------------------*/
 let gameOver, gamePaused, linesCleared, timerIntervalId, holdingBlock
-let nextUp = []
+// let nextUpBlock = []
+let nextUpList = []
 let boardArray = []
 let heldBlockObj = []
 
 /*------------------------- Cached Element References --------------------------*/
 const board = document.querySelector("#board-container")
 const nextUpContainer = document.querySelector("#next-block-container")
+const holdContainer = document.querySelector("#hold")
 const startPauseButton = document.querySelector("#start-pause")
 const form = document.querySelector("form")
 
@@ -169,9 +171,14 @@ const form = document.querySelector("form")
     // removeBlockOnBoard(tester.board, tester)
     // console.log(JSON.parse(JSON.stringify(tester.board)))
 /*-------------------------------- Functions --------------------------------*/
-createDOMBoard()
-createNextUpSpaces()
+setUpDOM()
 init()
+
+function setUpDOM(){
+    createDOMBoard()
+    createNextUpSpaces()
+    createHoldSpace()
+}
 
 // On-screen game board set up
 function createDOMBoard(){
@@ -195,6 +202,13 @@ function createNextUpSpaces(){
         }
     }
 }
+function createHoldSpace(){
+    for (let c = 0; c < (4*4); c++) {
+        let cell = document.createElement("div")
+        cell.classList.add("HoldCells")
+        holdContainer.appendChild(cell)
+    }
+}
 
 function init(){
     
@@ -205,7 +219,8 @@ function init(){
     linesCleared = 0
     boardArray = []
     tester.board = []
-    nextUp = []
+    nextUpBlock = []
+    nextUpList = []
     heldBlock = []
     createBoardArray()
 }
@@ -229,25 +244,28 @@ function createBoardArray(){
 
 function gameStart(){
 // function is called by game start listener
-    while (nextUp.length < 3){
-        fillNextUpArray()
+    while (nextUpList.length < 3){
+        fillNextUpList()
     }
     setUpNewBlock()
 }
 
-function fillNextUpArray(){
+function fillNextUpList(){
 // adds a random block type (entire object is added) to the nextUp array
     let randomIndex = Math.floor(Math.random() * 7)
     let randomBlockObj = allBlocks[randomIndex]
    
-    nextUp.push(randomBlockObj)
-    renderNextUp()
+    nextUpList.push(randomBlockObj)
+
+    if (nextUpList.length === 3){
+        renderNextUp()
+    }
 }
 
 function setUpNewBlock(){
 // sets the nextUp block as the current block
 // adjusts current state accordingly
-    currentState.blockObject = nextUp.shift()
+    currentState.blockObject = nextUpList.shift()
     currentState.rotation = 0
     currentState.block = currentState.blockObject[currentState.rotation] 
 
@@ -269,7 +287,7 @@ function placeBlockAtTop(){
     if (collided === false){
         placeBlockOnABoard(boardArray, currentState)
         renderBoard()
-        fillNextUpArray()
+        fillNextUpList()
     } else {
         startStopInterval("pause")
         gameOver = true
@@ -460,7 +478,21 @@ function renderBoard(){
 }
 
 function renderNextUp(){
-    console.log("you still need to create renderNextUp()")
+    for (let box = 1; box < 4; box ++){
+        let index = 0;
+        let nextUpBlockObj = nextUpList[box-1][0]
+        let nextUpBox = document.querySelector(`.next-box-${box}`)
+        for (let rows = 0; rows < 4; rows ++){
+            for (let col = 0; col < 4; col ++){
+                if (nextUpBlockObj[rows][col] === 1){
+                    nextUpBox.children[index].innerText = "X"
+                } else{
+                    nextUpBox.children[index].innerText = ""
+                }
+                index ++
+            }
+        }
+    }
 }
 
 function renderGameOver(){
