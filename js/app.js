@@ -520,10 +520,10 @@ function renderHold(){
         for (let col = 0; col < 4; col ++){
             if (heldBlock[rows][col] === 1){
                 holdBox.children[index].innerText = "X"
-                nextUpBox.children[index].className = "holdCell color"
+                holdBox.children[index].className = "holdCell color"
             } else{
                 holdBox.children[index].innerText = ""
-                nextUpBox.children[index].className = "holdCell"
+                holdBox.children[index].className = "holdCell"
             }
             index ++
         }

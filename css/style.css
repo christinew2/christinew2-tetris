@@ -74,7 +74,7 @@ html {
     width: 80%;
   }
 
-  .sidebar-title{
+  .status-title{
     font-weight: bold;
     font-size: 1.2rem;
   }
@@ -92,17 +92,19 @@ html {
     justify-content: center;
     background-color: white;
     border: 0.5px solid black;
+    margin: 0.5vw;
   }
 
   #next-block-container{
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-evenly;
   }
-  .nextUpCell, 
+  /* .nextUpCell, 
   .holdCell {
     border-right: 0.1rem solid rgb(203, 203, 203);
     border-bottom: 0.1rem solid rgb(203, 203, 203);
-  }
+  } */
 
   #board-container {
     display: inline-grid;
@@ -124,6 +126,8 @@ html {
   
   .color{
     background-color: rgb(85, 13, 0);
+    border-right: 0.1rem solid rgb(203, 203, 203);
+    border-bottom: 0.1rem solid rgb(203, 203, 203);
   }
 
 
