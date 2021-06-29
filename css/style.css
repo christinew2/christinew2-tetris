@@ -85,7 +85,12 @@ html {
   }
 
   .block-holder{
-    padding: 1vmin 1vmin 1vmin 1vmin;
+    display: inline-grid;
+    grid-template-rows: repeat(4, 3vw);
+    grid-template-columns: repeat(4, 3vw);
+    grid-gap: 0vmin;
+    justify-content: center;
+    background-color: white;
     border: 0.5px solid black;
   }
 
@@ -106,7 +111,7 @@ html {
     justify-content: center;
     background-color: white;
   }
-
+  
   #board-container > div {
     border-right: 0.1rem solid rgb(203, 203, 203);
     border-bottom: 0.1rem solid rgb(203, 203, 203);
@@ -114,6 +119,7 @@ html {
     justify-content: center;
     text-align: center;
   }  
+  
 
 
   @media only screen and (min-width: 768px){
