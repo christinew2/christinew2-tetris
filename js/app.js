@@ -327,15 +327,15 @@ function userMove(moveType){
 }
 
 function removeBlockOnABoard(boardArr, state){
-    let blktype = determineBlockType()
+    let blktype = determineBlockType(0, currentState.block)
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
             if (boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
-                boardArr[r + state.row][c + state.column] =0
                 if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
                     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                    board.children[squareNum].classList.remove(`${blktype}`)
+                    board.children[squareNum].className = (`square`, `${squareNum}`)
                 }
+                boardArr[r + state.row][c + state.column] =0
             }
         }
     } 
@@ -356,14 +356,14 @@ function setUpTester(){
 function placeBlockOnABoard(boardArr, state){
 // places a 4x4 holding block 
 // could be for either boardArray or testerArray 
+let blktype = determineBlockType()
     if (state === currentState){
-        let blktype = determineBlockType()
         for (let r = 0; r < 4; r++){
             for (let c = 0; c < 4; c++){
                 boardArr[r + state.row][c + state.column] += state.block[r][c] 
                 if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
                     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                    
+                    board.children.className = (`square`, `${squareNum}`)
                     board.children[squareNum].classList.add(`${blktype}`)
 
                 }
@@ -564,6 +564,7 @@ function renderHold(){
         for (let col = 0; col < 4; col ++){
             if (heldBlock[rows][col] === 1){
                 holdBox.children[index].innerText = "X"
+                holdBox.children[index].className = "holdCell"
                 holdBox.children[index].classList.add(`${blktype}`)
             } else{
                 holdBox.children[index].innerText = ""
