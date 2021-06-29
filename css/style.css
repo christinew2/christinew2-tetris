@@ -89,7 +89,7 @@ html {
   #number{
     padding: 1vmin 1vmin 1vmin 1vmin;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 5vmin;
   }
 
   .block-holder{
@@ -132,12 +132,33 @@ html {
     text-align: center;
   }  
   
-  .color{
+  /* .color{
     background-color: rgb(85, 13, 0);
     border-right: 0.1rem solid rgb(203, 203, 203);
     border-bottom: 0.1rem solid rgb(203, 203, 203);
-  }
+  } */
 
+  .lblock {
+    background-color: var(--l-block-color)
+  }
+  .reverselblock {
+    background-color: var(--reverse-l-block-color);
+  }
+  .squareblock {
+    background-color: var(--square-block-color);
+  }
+  .iblock {
+    background-color: var(--i-block-color);
+  }
+  .zblock {
+    background-color: var(--z-block-color);
+  }
+  .reversezblock {
+    background-color: var(--reverse-z-block-color);
+  }
+  .tblock {
+    background-color: var(--t-block-color);
+  }
 
 
 

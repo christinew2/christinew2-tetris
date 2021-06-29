@@ -161,7 +161,6 @@ const nextUpContainer = document.querySelector("#next-block-container")
 const holdContainer = document.querySelector("#hold")
 const startPauseButton = document.querySelector("#start-pause")
 const linesClearedDisplay = document.querySelector("#number")
-const form = document.querySelector("form")
 
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
  // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
@@ -185,7 +184,7 @@ function setUpDOM(){
 function createDOMBoard(){
     for (let cell = 0; cell < (20 * 10); cell++) {
       let square = document.createElement("div")
-      square.classList.add("square")
+      square.classList.add(`square`, `${cell}`)
       board.appendChild(square)
     }
 }
@@ -326,11 +325,15 @@ function userMove(moveType){
     return collided 
 }
 
-function removeBlockOnABoard(arr, obj){
+function removeBlockOnABoard(boardArr, state){
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
-            if (arr[r + obj.row][c + obj.column] === currentState.block[r][c]){
-                arr[r + obj.row][c + obj.column] =0
+            if (boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
+                boardArr[r + state.row][c + state.column] =0
+                if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
+                    let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
+                    board.children[squareNum].className = `square ${squareNum}`
+                }
             }
         }
     } 
@@ -346,91 +349,97 @@ function setUpTester(){
         tester.column = currentState.column
         tester.block = currentState.block
         tester.rotation = currentState.rotation
-    }
+}
     
-    function placeBlockOnABoard(boardArr, state){
-    // places a 4x4 holding block 
-    // could be for either boardArray or testerArray 
-        if (state === currentState){
-            for (let r = 0; r < 4; r++){
-                for (let c = 0; c < 4; c++){
-                    boardArr[r + state.row][c + state.column] += state.block[r][c] 
+function placeBlockOnABoard(boardArr, state){
+// places a 4x4 holding block 
+// could be for either boardArray or testerArray 
+    if (state === currentState){
+        let blktype = determineBlockType()
+        for (let r = 0; r < 4; r++){
+            for (let c = 0; c < 4; c++){
+                boardArr[r + state.row][c + state.column] += state.block[r][c] 
+                if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
+                    let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
+                    console.log(squareNum)
+                    board.children[squareNum].className = `square ${squareNum} ${blktype}`   
 
                 }
-            } 
-        } else{
-            for (let r = 0; r < 4; r++){
-                for (let c = 0; c < 4; c++){
-                    boardArr[r + state.row][c + state.column] += state.block[r][c]        
-                }
-            } 
-        }
-    }
-    
-    function checkForCollision(){
-    // checks for a 2 on the tester board, which indicates collision
-        for (let rowArr of tester.board){
-            if (rowArr.includes(2)){
-                return true
-            } 
+            }
         } 
-        return false
+    } else{
+        for (let r = 0; r < 4; r++){
+            for (let c = 0; c < 4; c++){
+                boardArr[r + state.row][c + state.column] += state.block[r][c]        
+            }
+        } 
     }
-    /* ========================================================== */
+}
+    
+function checkForCollision(){
+// checks for a 2 on the tester board, which indicates collision
+    for (let rowArr of tester.board){
+        if (rowArr.includes(2)){
+            return true
+        } 
+    } 
+    return false
+}
+/* ========================================================== */
 
     
     
-    function whatMove(moveType, board, state){
-        switch (moveType){
+function whatMove(moveType, board, state){
+    switch (moveType){
         case "down":
             state.row += 1
             break
         case "left":
             state.column -= 1
             break
-            case "right":
-                state.column += 1
-                break
-                case "CW":
-                    if (state.rotation < 3){
-                        state.rotation += 1
-                    } else{
-                        state.rotation = 0
-                    }
-                    state.block = currentState.blockObject[state.rotation]
-                    break
-                    case "CCW":
-                        if (state.rotation > 0){
-                            state.rotation -= 1
-                        } else{
-                            state.rotation = 3
-                        }
+        case "right":
+            state.column += 1
+            break
+        case "CW":
+            if (state.rotation < 3){
+                state.rotation += 1
+            } else{
+                state.rotation = 0
+            }
             state.block = currentState.blockObject[state.rotation]
             break
-            default:
-                return      
-        }
+        case "CCW":
+            if (state.rotation > 0){
+                state.rotation -= 1
+            } else{
+                state.rotation = 3
+            }
+            state.block = currentState.blockObject[state.rotation]
+            break
+        default:
+            return      
     }
+}
         
-    function checkForFullRow(){
-        for (let row = 1; row<21; row++){
-        // check for full rows, excluding borders
-            let count = 0
-            for (let i = 0; i<boardArray[row].length; i++){
-                count += boardArray[row][i]
-                console.log(count)
-                if (count === 12){
-                    console.log(boardArray[row])
-                    linesCleared++
-                    displayLinesCleared()
-                    boardArray.pop(boardArray[row])
-                    boardArray.splice(1,0, emptyRow.slice())
-                    console.log(linesCleared)
-                }
+function checkForFullRow(){
+    for (let row = 1; row<21; row++){
+    // check for full rows, excluding borders
+        let count = 0
+        for (let i = 0; i<boardArray[row].length; i++){
+            count += boardArray[row][i]
+            console.log(count)
+            if (count === 12){
+                console.log(boardArray[row])
+                linesCleared++
+                displayLinesCleared()
+                boardArray.pop(boardArray[row])
+                boardArray.splice(1,0, emptyRow.slice())
+                console.log(linesCleared)
             }
         }
-        renderBoard()
     }
+    renderBoard()
+}
 
 function hold() {
     if (holdingBlock === false){
@@ -485,6 +494,23 @@ function displayLinesCleared(){
     }
 }
 
+function determineBlockType(rotation, block){
+    if (lBlock[rotation] === block){
+        return "lblock"
+    } else if (reverseLBlock[rotation] === block){
+        return "reverselblock"
+    } else if (square[rotation] === block){
+        return "squareblock"
+    } else if (iBlock[rotation] === block){
+        return "iblock"
+    } else if (zBlock[rotation] === block){
+        return "zblock"
+    } else if (reverseZBlock[rotation] === block){
+        return "reversezblock"
+    } else if (tBlock[rotation] === block){
+        return "tblock"
+    }
+}
 
 function renderBoard(){
     // console.log("you still need to create render board()")
@@ -494,10 +520,10 @@ function renderBoard(){
         for (let col = 1; col < 11; col++){
             if (boardArray[rows][col] === 1){
                 board.children[index].innerText = "X"
-                board.children[index].className = "square color"
+                // board.children[index].className = `square ${index} color`
             } else{
                 board.children[index].innerText = ""
-                board.children[index].className = "square"
+                // board.children[index].className = `square ${index}`
             }
             index++
         }
@@ -507,13 +533,15 @@ function renderBoard(){
 function renderNextUp(){
     for (let box = 1; box < 4; box ++){
         let index = 0;
-        let nextUpBlockObj = nextUpList[box-1][0]
+        let nextUpBlock = nextUpList[box-1][0]
         let nextUpBox = document.querySelector(`.next-box-${box}`)
+        let blktype = determineBlockType(0, nextUpBlock)
+        console.log(blktype)
         for (let rows = 0; rows < 4; rows ++){
             for (let col = 0; col < 4; col ++){
-                if (nextUpBlockObj[rows][col] === 1){
+                if (nextUpBlock[rows][col] === 1){
                     nextUpBox.children[index].innerText = "X"
-                    nextUpBox.children[index].className = "nextUpCell color"
+                    nextUpBox.children[index].className = `nextUpCell ${blktype}`
                 } else{
                     nextUpBox.children[index].innerText = ""
                     nextUpBox.children[index].className = "nextUpCell"
@@ -528,11 +556,12 @@ function renderHold(){
     let index = 0;
     let heldBlock = heldBlockObj[0]
     let holdBox = document.querySelector("#hold")
+    let blktype = determineBlockType(0, heldBlock)
     for (let rows = 0; rows < 4; rows ++){
         for (let col = 0; col < 4; col ++){
             if (heldBlock[rows][col] === 1){
                 holdBox.children[index].innerText = "X"
-                holdBox.children[index].className = "holdCell color"
+                holdBox.children[index].className = `holdCell ${blktype}` 
             } else{
                 holdBox.children[index].innerText = ""
                 holdBox.children[index].className = "holdCell"
@@ -676,6 +705,8 @@ document.querySelector("#controls-panel").addEventListener("click", function(eve
 })
 document.querySelector("#reset-button").addEventListener("click", function(event){
     startStopInterval("pause")
+    gamePaused = true
     init()
+    gamePaused = false
     startStopInterval("start")
 })
