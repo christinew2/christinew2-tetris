@@ -356,7 +356,7 @@ function setUpTester(){
 function placeBlockOnABoard(boardArr, state){
 // places a 4x4 holding block 
 // could be for either boardArray or testerArray 
-let blktype = determineBlockType()
+let blktype = determineBlockType(0, currentState.block)
     if (state === currentState){
         for (let r = 0; r < 4; r++){
             for (let c = 0; c < 4; c++){
