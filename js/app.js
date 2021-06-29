@@ -268,6 +268,7 @@ function setUpNewBlock(){
 // sets the nextUp block as the current block
 // adjusts current state accordingly
     currentState.blockObject = nextUpList.shift()
+    fillNextUpList()
     currentState.rotation = 0
     currentState.block = currentState.blockObject[currentState.rotation] 
 
@@ -289,7 +290,6 @@ function placeBlockAtTop(){
     if (collided === false){
         placeBlockOnABoard(boardArray, currentState)
         renderBoard()
-        fillNextUpList()
     } else {
         startStopInterval("pause")
         gameOver = true
