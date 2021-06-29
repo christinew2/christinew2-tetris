@@ -98,8 +98,10 @@ html {
     display: flex;
     flex-flow: row nowrap;
   }
-  #next-block-container > div{
-    margin-left: 1vmin;
+  .nextUpCell, 
+  .holdCell {
+    border-right: 0.1rem solid rgb(203, 203, 203);
+    border-bottom: 0.1rem solid rgb(203, 203, 203);
   }
 
   #board-container {
@@ -120,6 +122,11 @@ html {
     text-align: center;
   }  
   
+  .color{
+    background-color: rgb(85, 13, 0);
+  }
+
+
 
 
   @media only screen and (min-width: 768px){

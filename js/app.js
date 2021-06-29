@@ -198,7 +198,7 @@ function createNextUpSpaces(){
         let nextUpBox = document.querySelector(`.next-box-${b}`)
         for (let c = 0; c < (4*4); c++) {
           let cell = document.createElement("div")
-          cell.classList.add("nextUpCells")
+          cell.classList.add("nextUpCell")
           nextUpBox.appendChild(cell)
         }
     }
@@ -206,7 +206,7 @@ function createNextUpSpaces(){
 function createHoldSpace(){
     for (let c = 0; c < (4*4); c++) {
         let cell = document.createElement("div")
-        cell.classList.add("HoldCells")
+        cell.classList.add("holdCell")
         holdContainer.appendChild(cell)
     }
 }
@@ -223,7 +223,7 @@ function init(){
     nextUpBlock = []
     nextUpList = []
     heldBlock = []
-    
+
     linesClearedDisplay.innerText = "0"
     createBoardArray()
 }
@@ -482,8 +482,10 @@ function renderBoard(){
         for (let col = 1; col < 11; col++){
             if (boardArray[rows][col] === 1){
                 board.children[index].innerText = "X"
+                board.children[index].className = "square color"
             } else{
                 board.children[index].innerText = ""
+                board.children[index].className = "square"
             }
             index++
         }
@@ -499,8 +501,10 @@ function renderNextUp(){
             for (let col = 0; col < 4; col ++){
                 if (nextUpBlockObj[rows][col] === 1){
                     nextUpBox.children[index].innerText = "X"
+                    nextUpBox.children[index].className = "nextUpCell color"
                 } else{
                     nextUpBox.children[index].innerText = ""
+                    nextUpBox.children[index].className = "nextUpCell"
                 }
                 index ++
             }
@@ -516,8 +520,10 @@ function renderHold(){
         for (let col = 0; col < 4; col ++){
             if (heldBlock[rows][col] === 1){
                 holdBox.children[index].innerText = "X"
+                nextUpBox.children[index].className = "holdCell color"
             } else{
                 holdBox.children[index].innerText = ""
+                nextUpBox.children[index].className = "holdCell"
             }
             index ++
         }
