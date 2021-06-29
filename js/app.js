@@ -656,42 +656,52 @@ document.addEventListener("keydown", function(event){
 })
 // buttons for mobile
 
-startPauseButton.addEventListener("click", startPause)
+startPauseButton.addEventListener("click", function(event){
+    if (gameOver === false){
+        startPause()
+    } else {
+        startStopInterval("pause")
+        gamePaused = true
+        init()
+        gamePaused = false
+        startStopInterval("start")
+    }
+})
 
 document.querySelector("#rotate-ccw").addEventListener("click", function(event){
-    if (gamePaused === false){
+    if (gamePaused === false && gameOver === false){
         userMove("CCW")
     }
     console.log("I'M ROTATING COUNTERCLOCKWISE!!!")
 })
 document.querySelector("#rotate-cw").addEventListener("click", function(event){
-    if (gamePaused === false){
+    if (gamePaused === false && gameOver === false){
         userMove("CW")
     }
     console.log("I'M ROTATING CLOCKWISE!!!")
 })
 document.querySelector("#move-left").addEventListener("click", function(event){
-    if (gamePaused === false){
+    if (gamePaused === false && gameOver === false){
         userMove("left")
     }
     console.log("I'M MOVING LEFT!!!")
     
 })
 document.querySelector("#move-right").addEventListener("click", function(event){
-    if (gamePaused === false){
+    if (gamePaused === false && gameOver === false){
         userMove("right")
     }    
     console.log("I'M MOVING RIGHT!!!!!")
 })
 document.querySelector("#move-down").addEventListener("click", function(event){
     console.log("I'M MOVING DOWN!!!")
-    if (gamePaused === false){
+    if (gamePaused === false && gameOver === false){
         userMove("down")
     }
 })
 document.querySelector("#hold-button").addEventListener("click", function(event){
     console.log("I'M HOLDING A BLOCK")
-    if (gamePaused === false){
+    if (gamePaused === false && gameOver === false){
         hold()
     }
 })
