@@ -277,15 +277,48 @@ html {
       background-size: 300% 300%;
       display: grid;
       grid-template-columns: auto auto auto auto;
-      grid-template-rows: auto auto auto auto auto auto auto auto;
-
+      grid-template-rows: auto auto auto auto auto;
+      grid-template-areas:
+        "title" "title" "settings" "settings"
+        "empty" "board" "cleared" "empty"
+        "empty" "board" "hold" "empty"
+        "empty" "board" "next" "empty"
+        "empty" "controls" "controls" "empty"
 
 
     }
+
+    #game-name {
+      grid-area: title;
+      font-size: 10rem;
+    }
+
+    #settings-container {
+      grid-area: settings;
+    }
+
+  
     #board-container {
+      grid-area: board;
       grid-template-rows: repeat(20, 4vmin);
       grid-template-columns: repeat(10, 4vmin);
       
+    }
+
+    #cleared-container {
+      grid-area: cleared;
+    }
+
+    #hold-container {
+      grid-area: hold;
+    }
+
+    #next-container {
+      grid-area: next;
+    }
+
+    #button-container {
+      grid-area: controls;
     }
   }
 
