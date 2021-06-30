@@ -45,6 +45,32 @@ html {
   }
 
   .dark {
+    --background: rgb(0, 0, 0);
+    --background-image: linear-gradient(to right top, #303030, #404040, #525252, #646464, #767676);
+    --text-color: white;
+
+    --i-block-color: #aa6d65;
+    --l-block-color: #c48851;
+    --reverse-l-block-color: #ecdc7fd8;
+    --square-block-color: #99d8bea9;
+    --z-block-color: #70aec9;
+    --reverse-z-block-color: #82b6b993;
+    --t-block-color: #8796eba9;
+
+    --block-border: 0.1rem solid black;
+    --block-holder-border: .5px solid rgb(255, 255, 255);
+    --block-holder-color: rgba(10, 10, 10, 0.801);
+
+    --board-container-border: 1px solid rgb(255, 255, 255);
+    --grid-line-color: 0.1rem solid rgb(216, 216, 216);
+
+
+    --game-over-box-color: rgba(226, 226, 226, 0.8);
+    --game-over-text-color: rgb(49, 49, 49);
+    --game-over-border: 1px solid gray;
+
+  }
+  .other {
     --background: black;
     --background-image: linear-gradient(to right top, #303030, #404040, #525252, #646464, #767676);
     --text-color: white;
@@ -93,8 +119,14 @@ html {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     width: 100%;
+  }
+  #settings-container > *{
+    font-size: 1rem;
+  }
+  #reset-button{
+    font-size: 1rem;
   }
 
   #status-container,
@@ -102,7 +134,7 @@ html {
   #settings-container {
     display: flex;
     flex-flow: row nowrap;
-    justify-content:space-between;
+    justify-content:center;
     align-items: flex-start;
     text-align: center;
   }
@@ -126,13 +158,14 @@ html {
 
   .block-holder{
     display: inline-grid;
-    grid-template-rows: repeat(4, 3vw);
-    grid-template-columns: repeat(4, 3vw);
+    grid-template-rows: repeat(4, 2.8vmin);
+    grid-template-columns: repeat(4, 2.8vmin);
     grid-gap: 0vmin;
     justify-content: center;
     background-color: var(--block-holder-color);
     border: var(--block-holder-border);
     margin: 0.5vw;
+    border-radius: 2px;
   }
 
   #next-block-container{
@@ -144,12 +177,13 @@ html {
 
   #board-container {
     display: inline-grid;
-    grid-template-rows: repeat(20, 6vw);
-    grid-template-columns: repeat(10, 6vw);
+    grid-template-rows: repeat(20, 5vmin);
+    grid-template-columns: repeat(10, 5vmin);
     grid-gap: 0vmin;
     border: var(--board-container-border);
     justify-content: center;
     background-color: var(--block-holder-color);
+    border-radius: 2px;
   }
   
   #board-container > div {
@@ -158,7 +192,30 @@ html {
     align-content: center;
     justify-content: center;
     text-align: center;
+
   }  
+  #arrows-container {
+    margin: 0.5rem 1rem 0.5rem 1rem;
+  }
+  #arrows-container > *{
+    font-size: 2rem;
+    width: 9vmin;
+    height: 7vmin;
+  }
+  #rotators-container {
+    margin: 0.5rem 1rem 0.5rem 1rem;
+  }
+  #rotators-container >*{
+    font-size: 2rem;
+    width:  9vmin;
+    height: 7vmin;
+  }
+  #hold-button {
+    font-size: 1rem;
+    width: 8vmin;
+    height: 7vmin;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+  }
 
   #msg-overlay {
     position: absolute;
@@ -175,12 +232,6 @@ html {
     align-items: center;
     color: var(--game-over-text-color);
   }
-  
-  /* .color{
-    background-color: rgb(85, 13, 0);
-    border-right: 0.1rem solid rgb(203, 203, 203);
-    border-bottom: 0.1rem solid rgb(203, 203, 203);
-  } */
 
   .lblock {
     background-color: var(--l-block-color);
@@ -221,13 +272,19 @@ html {
 
 
 
-  @media only screen and (min-width: 768px){
+  @media only screen and (min-width: 660px){
     body{
       background-size: 300% 300%;
+      display: grid;
+      grid-template-columns: auto auto auto auto;
+      grid-template-rows: auto auto auto auto auto auto auto auto;
+
+
+
     }
     #board-container {
-      grid-template-rows: repeat(20, 3vw);
-      grid-template-columns: repeat(10, 3vw);
+      grid-template-rows: repeat(20, 4vmin);
+      grid-template-columns: repeat(10, 4vmin);
       
     }
   }

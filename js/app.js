@@ -1,9 +1,8 @@
 /*-------------------------------- Objects --------------------------------*/
 const currentState = {
     block: null,
-    rotation: null,  // check if this is necessary
-    blockObject: [],
-    // starting positions of 4x4 holding current block
+    rotation: null, 
+    blockObject: [], // starting positions of 4x4 holding current block
     column: null, 
     row: null,
 }
@@ -13,7 +12,7 @@ const tester = {
     column: null, 
     row: null,
     block: null,
-    rotation: null,  // check if this is necessary
+    rotation: null, 
 }
 
 const lBlock = {
@@ -150,7 +149,6 @@ const allBlocks = [lBlock, reverseLBlock, square, iBlock, zBlock, reverseZBlock,
 
 /*------------------------------- Variables --------------------------------*/
 let gameOver, gamePaused, linesCleared, timerIntervalId, holdingBlock
-// let nextUpBlock = []
 let nextUpList = []
 let boardArray = []
 let blktypeArray = []
@@ -165,13 +163,6 @@ const linesClearedDisplay = document.querySelector("#number")
 const msgOverlay = document.querySelector("#msg-overlay")
 
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
- // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
-    // console.log("board array: ", JSON.parse(JSON.stringify(boardArray)))
-    // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
-    // fill nextUp array
-    
-    // removeBlockOnBoard(tester.board, tester)
-    // console.log(JSON.parse(JSON.stringify(tester.board)))
 /*-------------------------------- Functions --------------------------------*/
 setUpDOM()
 init()
@@ -369,16 +360,6 @@ let blktype = determineBlockType(0, currentState.blockObject[0])
                     boardArr[r + state.row][c + state.column] = state.block[r][c]
                     blktypeArray[r + state.row][c + state.column] = blktype
                 }
-                // boardArr[r + state.row][c + state.column] += state.block[r][c] 
-                // if (boardArr[r + state.row][c + state.column] === 1){
-                //     blktypeArray[r + state.row][c + state.column] = blktype
-                //     if(state.row === 0){
-                //         blktypeArray[state.row] = fullRow.slice()
-                //     }
-                //     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                //     board.children.className = (`square`, `${squareNum}`)
-                //     board.children[squareNum].classList.add(`${blktype}`)
-
             }
         }
     } else{
@@ -524,7 +505,6 @@ function determineBlockType(rotation, block){
 }
 
 function renderBoard(){
-    // console.log("you still need to create render board()")
     let index = 0;
     for (let rows = 1; rows <= 20; rows++){
     // exclude the borders
@@ -601,7 +581,7 @@ function toggleTheme(){
 // keyboard input
 document.addEventListener("keydown", function(event){
     if(event.defaultPrevented){
-        return; // do nothing if event already handled  ******************** check on this??
+        return; 
     }
     switch (event.key) {
     // arrow keys
