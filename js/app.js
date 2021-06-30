@@ -153,6 +153,7 @@ let gameOver, gamePaused, linesCleared, timerIntervalId, holdingBlock
 // let nextUpBlock = []
 let nextUpList = []
 let boardArray = []
+let blktypeArray = []
 let heldBlockObj = []
 
 /*------------------------- Cached Element References --------------------------*/
@@ -241,6 +242,10 @@ function createBoardArray(){
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
     boardArray.push(fullRow.slice()) 
+    
+    boardArray.forEach(row => {
+        blktypeArray.push(row.slice())
+    })
     renderBoard()
     gameStart()
 }
@@ -331,11 +336,12 @@ function removeBlockOnABoard(boardArr, state){
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
             if (boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
-                if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
-                    let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                    board.children[squareNum].className = (`square`, `${squareNum}`)
-                }
-                boardArr[r + state.row][c + state.column] =0
+                // if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
+                //     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
+                //     board.children[squareNum].className = (`square`, `${squareNum}`)
+                // }
+                boardArr[r + state.row][c + state.column] = 0
+                blktypeArray[r + state.row][c + state.column] = 0
             }
         }
     } 
@@ -361,10 +367,14 @@ let blktype = determineBlockType(0, currentState.block)
         for (let r = 0; r < 4; r++){
             for (let c = 0; c < 4; c++){
                 boardArr[r + state.row][c + state.column] += state.block[r][c] 
-                if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
-                    let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                    board.children.className = (`square`, `${squareNum}`)
-                    board.children[squareNum].classList.add(`${blktype}`)
+                if (boardArr[r + state.row][c + state.column] === 1){
+                    blktypeArray[r + state.row][c + state.column] = blktype
+                    if(state.row === 0){
+                        blktypeArray[state.row] = fullRow.slice()
+                    }
+                //     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
+                //     board.children.className = (`square`, `${squareNum}`)
+                //     board.children[squareNum].classList.add(`${blktype}`)
 
                 }
             }
@@ -522,9 +532,12 @@ function renderBoard(){
         for (let col = 1; col < 11; col++){
             if (boardArray[rows][col] === 1){
                 board.children[index].innerText = "X"
+                let blktype = blktypeArray[rows][col]
+                board.children[index].classList.add(`${blktype}`)
                 // board.children[index].className = `square ${index} color`
             } else{
                 board.children[index].innerText = ""
+                board.children[index].className = (`square ${index}`)
                 // board.children[index].className = `square ${index}`
             }
             index++
