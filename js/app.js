@@ -366,19 +366,22 @@ let blktype = determineBlockType(0, currentState.block)
     if (state === currentState){
         for (let r = 0; r < 4; r++){
             for (let c = 0; c < 4; c++){
-                boardArr[r + state.row][c + state.column] += state.block[r][c] 
-                if (boardArr[r + state.row][c + state.column] === 1){
+                if (state.block[r][c] === 1){
+                    boardArr[r + state.row][c + state.column] = state.block[r][c]
                     blktypeArray[r + state.row][c + state.column] = blktype
-                    if(state.row === 0){
-                        blktypeArray[state.row] = fullRow.slice()
-                    }
+                }
+                // boardArr[r + state.row][c + state.column] += state.block[r][c] 
+                // if (boardArr[r + state.row][c + state.column] === 1){
+                //     blktypeArray[r + state.row][c + state.column] = blktype
+                //     if(state.row === 0){
+                //         blktypeArray[state.row] = fullRow.slice()
+                //     }
                 //     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
                 //     board.children.className = (`square`, `${squareNum}`)
                 //     board.children[squareNum].classList.add(`${blktype}`)
 
-                }
             }
-        } 
+        }
     } else{
         for (let r = 0; r < 4; r++){
             for (let c = 0; c < 4; c++){
