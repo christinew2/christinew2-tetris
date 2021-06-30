@@ -162,6 +162,7 @@ const nextUpContainer = document.querySelector("#next-block-container")
 const holdContainer = document.querySelector("#hold")
 const startPauseButton = document.querySelector("#start-pause")
 const linesClearedDisplay = document.querySelector("#number")
+const msgOverlay = document.querySelector("#msg-overlay")
 
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
  // console.log("tester board: ", JSON.parse(JSON.stringify(tester.board)))
@@ -436,16 +437,13 @@ function checkForFullRow(){
     for (let row = 1; row<21; row++){
     // check for full rows, excluding borders
         let count = 0
-        for (let i = 0; i<boardArray[row].length; i++){
+        for (let i = 0; i < boardArray[row].length; i++){
             count += boardArray[row][i]
-            console.log(count)
             if (count === 12){
-                console.log(boardArray[row])
                 linesCleared++
-                displayLinesCleared()
-                boardArray.pop(boardArray[row])
+                boardArray.splice(row, 1)
                 boardArray.splice(1,0, emptyRow.slice())
-                console.log(linesCleared)
+                displayLinesCleared()
             }
         }
     }

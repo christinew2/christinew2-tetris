@@ -21,13 +21,13 @@ html {
     --background: white;
     --background-image: linear-gradient(to left bottom, #ffffff, #f7f7f7, #f0f0f0, #e8e8e8, #e1e1e1);
 
-    --i-block-color: red;
-    --l-block-color: orange;
-    --reverse-l-block-color: yellow;
-    --square-block-color: green;
-    --z-block-color: blue;
-    --reverse-z-block-color: purple;
-    --t-block-color: violet;
+    --i-block-color: #EC87B9;
+    --l-block-color: #FBBD4E;
+    --reverse-l-block-color: #FDD349;
+    --square-block-color: #8ED1B5;
+    --z-block-color: #55CDCD;
+    --reverse-z-block-color: #44B0C6;
+    --t-block-color: #757ACD;
 
     --block-border: 0.1rem solid white
   
@@ -128,6 +128,16 @@ html {
     justify-content: center;
     text-align: center;
   }  
+
+  #msg-overlay {
+    position: absolute;
+    background-color:rgba(226, 226, 226, 0.8);
+    top:35%;
+    left: 15%;
+    right: 15%;
+    bottom: 50%;
+    border: 1px solid gray;
+  }
   
   /* .color{
     background-color: rgb(85, 13, 0);
