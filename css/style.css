@@ -29,6 +29,7 @@ html {
     --reverse-z-block-color: purple;
     --t-block-color: violet;
 
+    --block-border: 0.1rem solid white
   
 
   }
@@ -108,11 +109,7 @@ html {
     flex-flow: row nowrap;
     justify-content: space-evenly;
   }
-  /* .nextUpCell, 
-  .holdCell {
-    border-right: 0.1rem solid rgb(203, 203, 203);
-    border-bottom: 0.1rem solid rgb(203, 203, 203);
-  } */
+
 
   #board-container {
     display: inline-grid;
@@ -139,25 +136,39 @@ html {
   } */
 
   .lblock {
-    background-color: var(--l-block-color)
+    background-color: var(--l-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
   .reverselblock {
     background-color: var(--reverse-l-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
   .squareblock {
     background-color: var(--square-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
   .iblock {
     background-color: var(--i-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
   .zblock {
     background-color: var(--z-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
   .reversezblock {
     background-color: var(--reverse-z-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
   .tblock {
     background-color: var(--t-block-color);
+    border-right: var(--block-border);
+    border-bottom: var(--block-border)
   }
 
 
