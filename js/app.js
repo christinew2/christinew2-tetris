@@ -228,6 +228,7 @@ function init(){
 
     startPauseButton.innerText = "Start"
     linesClearedDisplay.innerText = "0"
+    msgOverlay.style.visibility = "hidden"
     createBoardArray()
 }
 
@@ -300,6 +301,7 @@ function placeBlockAtTop(){
     } else {
         startStopInterval("pause")
         gameOver = true
+        msgOverlay.style.visibility = "visible"
         renderGameOver()
     }    
 }

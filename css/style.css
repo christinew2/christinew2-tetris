@@ -20,16 +20,26 @@ html {
   .light {
     --background: white;
     --background-image: linear-gradient(to left bottom, #ffffff, #f7f7f7, #f0f0f0, #e8e8e8, #e1e1e1);
+    --text-color: black;
 
-    --i-block-color: #EC87B9;
-    --l-block-color: #FBBD4E;
-    --reverse-l-block-color: #FDD349;
+    --i-block-color: #ff9bcd;
+    --l-block-color: #ffc96cd0;
+    --reverse-l-block-color: #ffde71;
     --square-block-color: #8ED1B5;
-    --z-block-color: #55CDCD;
-    --reverse-z-block-color: #44B0C6;
-    --t-block-color: #757ACD;
+    --z-block-color: #57e6e6d2;
+    --reverse-z-block-color: #50c7df;
+    --t-block-color: #868be6e7;
 
-    --block-border: 0.1rem solid white
+    --block-border: 0.1rem solid white;
+    --block-holder-border: .5px solid black;
+    --block-holder-color: white;
+
+    --board-container-border: 1px solid black;
+    --grid-line-color: 0.1rem solid rgb(216, 216, 216);
+
+    --game-over-box-color: rgba(226, 226, 226, 0.8);
+    --game-over-text-color: rgb(49, 49, 49);
+    --game-over-border: 1px solid gray;
   
 
   }
@@ -37,6 +47,26 @@ html {
   .dark {
     --background: black;
     --background-image: linear-gradient(to right top, #303030, #404040, #525252, #646464, #767676);
+    --text-color: white;
+
+    --i-block-color: #e7bebe;
+    --l-block-color: #dabd93;
+    --reverse-l-block-color: #f3eca8;
+    --square-block-color: #96dba0e5;
+    --z-block-color: #a0e5e5dc;
+    --reverse-z-block-color: #87aed4e3;
+    --t-block-color: #b1aae9e8;
+
+    --block-border: 0.1rem solid white;
+    --block-holder-border: .5px solid black;
+    --block-holder-color: rgba(31, 31, 31, 0.932);
+
+    --board-container-border: 1px solid black;
+    --grid-line-color: 0.1rem solid rgb(216, 216, 216);
+
+    --game-over-box-color: rgba(226, 226, 226, 0.8);
+    --game-over-text-color: rgb(49, 49, 49);
+    --game-over-border: 1px solid gray;
 
   }
 
@@ -54,6 +84,7 @@ html {
   /* Use a system font, if none are available use an available sans-sarif   font */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: var(--text-color);
     margin: 0;
   }
 
@@ -99,8 +130,8 @@ html {
     grid-template-columns: repeat(4, 3vw);
     grid-gap: 0vmin;
     justify-content: center;
-    background-color: white;
-    border: 0.5px solid black;
+    background-color: var(--block-holder-color);
+    border: var(--block-holder-border);
     margin: 0.5vw;
   }
 
@@ -116,14 +147,14 @@ html {
     grid-template-rows: repeat(20, 6vw);
     grid-template-columns: repeat(10, 6vw);
     grid-gap: 0vmin;
-    border: 1px solid black;
+    border: var(--board-container-border);
     justify-content: center;
-    background-color: white;
+    background-color: var(--block-holder-color);
   }
   
   #board-container > div {
-    border-right: 0.1rem solid rgb(203, 203, 203);
-    border-bottom: 0.1rem solid rgb(203, 203, 203);
+    border-right: var(--grid-line-color);
+    border-bottom: var(--grid-line-color);
     align-content: center;
     justify-content: center;
     text-align: center;
@@ -131,12 +162,18 @@ html {
 
   #msg-overlay {
     position: absolute;
-    background-color:rgba(226, 226, 226, 0.8);
+    background-color:var(--game-over-box-color);
     top:35%;
     left: 15%;
     right: 15%;
     bottom: 50%;
-    border: 1px solid gray;
+    border: var(--game-over-border);
+    font-weight: bolder;
+    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--game-over-text-color);
   }
   
   /* .color{
@@ -148,7 +185,8 @@ html {
   .lblock {
     background-color: var(--l-block-color);
     border-right: var(--block-border);
-    border-bottom: var(--block-border)
+    border-bottom: var(--block-border);
+
   }
   .reverselblock {
     background-color: var(--reverse-l-block-color);
