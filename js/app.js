@@ -336,10 +336,6 @@ function removeBlockOnABoard(boardArr, state){
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
             if (currentState.block[r][c] === 1 && boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
-                // if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
-                //     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
-                //     board.children[squareNum].className = (`square`, `${squareNum}`)
-                // }
                 boardArr[r + state.row][c + state.column] = 0
                 blktypeArray[r + state.row][c + state.column] = 0
             }
@@ -534,14 +530,10 @@ function renderBoard(){
     // exclude the borders
         for (let col = 1; col < 11; col++){
             if (boardArray[rows][col] === 1){
-                board.children[index].innerText = "X"
                 let blktype = blktypeArray[rows][col]
                 board.children[index].classList.add(`${blktype}`)
-                // board.children[index].className = `square ${index} color`
             } else{
-                board.children[index].innerText = ""
                 board.children[index].className = (`square ${index}`)
-                // board.children[index].className = `square ${index}`
             }
             index++
         }
@@ -558,11 +550,9 @@ function renderNextUp(){
         for (let rows = 0; rows < 4; rows ++){
             for (let col = 0; col < 4; col ++){
                 if (nextUpBlock[rows][col] === 1){
-                    nextUpBox.children[index].innerText = "X"
                     nextUpBox.children[index].className = "nextUpCell"
                     nextUpBox.children[index].classList.add(`${blktype}`)
                 } else{
-                    nextUpBox.children[index].innerText = ""
                     nextUpBox.children[index].className = "nextUpCell"
                 }
                 index ++
@@ -579,11 +569,9 @@ function renderHold(){
     for (let rows = 0; rows < 4; rows ++){
         for (let col = 0; col < 4; col ++){
             if (heldBlock[rows][col] === 1){
-                holdBox.children[index].innerText = "X"
                 holdBox.children[index].className = "holdCell"
                 holdBox.children[index].classList.add(`${blktype}`)
             } else{
-                holdBox.children[index].innerText = ""
                 holdBox.children[index].className = "holdCell"
             }
             index ++
