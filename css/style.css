@@ -142,8 +142,12 @@ html {
   #status-container,
   #button-container{
     margin-bottom: 2vmin;
-    margin-top: 2vmin;
-    width: 80%;
+    margin-top: 5vmin;
+  }
+
+  #button-container{
+    width: 100%;
+    justify-content: space-between;
   }
 
   .status-title{
@@ -177,8 +181,8 @@ html {
 
   #board-container {
     display: inline-grid;
-    grid-template-rows: repeat(20, 5vmin);
-    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(20, 6vmin);
+    grid-template-columns: repeat(10, 6vmin);
     grid-gap: 0vmin;
     border: var(--board-container-border);
     justify-content: center;
@@ -195,26 +199,26 @@ html {
 
   }  
   #arrows-container {
-    margin: 0.5rem 1rem 0.5rem 1rem;
+    margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
   #arrows-container > *{
     font-size: 2rem;
-    width: 9vmin;
-    height: 7vmin;
+    width: 14vmin;
+    height: 10vmin;
   }
   #rotators-container {
-    margin: 0.5rem 1rem 0.5rem 1rem;
+    margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
   #rotators-container >*{
     font-size: 2rem;
-    width:  9vmin;
-    height: 7vmin;
+    width:  14vmin;
+    height: 10vmin;
   }
   #hold-button {
     font-size: 1rem;
-    width: 8vmin;
-    height: 7vmin;
-    margin: 0.5rem 1rem 0.5rem 1rem;
+    width: 14vmin;
+    height: 10vmin;
+    margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
 
   #msg-overlay {
