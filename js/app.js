@@ -332,10 +332,10 @@ function userMove(moveType){
 }
 
 function removeBlockOnABoard(boardArr, state){
-    let blktype = determineBlockType(0, currentState.block)
+    let blktype = determineBlockType(0, currentState.blockObject[0])
     for (let r = 0; r < 4; r++){
         for (let c = 0; c < 4; c++){
-            if (boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
+            if (currentState.block[r][c] === 1 && boardArr[r + state.row][c + state.column] === currentState.block[r][c]){
                 // if (state.row > 0 && boardArr[r + state.row][c + state.column] === 1){
                 //     let squareNum = 10*(r+ state.row - 1) + (c + state.column -1)
                 //     board.children[squareNum].className = (`square`, `${squareNum}`)
@@ -362,7 +362,7 @@ function setUpTester(){
 function placeBlockOnABoard(boardArr, state){
 // places a 4x4 holding block 
 // could be for either boardArray or testerArray 
-let blktype = determineBlockType(0, currentState.block)
+let blktype = determineBlockType(0, currentState.blockObject[0])
     if (state === currentState){
         for (let r = 0; r < 4; r++){
             for (let c = 0; c < 4; c++){
