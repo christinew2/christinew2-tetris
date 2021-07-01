@@ -161,6 +161,10 @@ const holdContainer = document.querySelector("#hold")
 const startPauseButton = document.querySelector("#start-pause")
 const linesClearedDisplay = document.querySelector("#number")
 const msgOverlay = document.querySelector("#msg-overlay")
+const lightDarkBtn = document.querySelector("#light-dark-mode")
+const allBtns = document.querySelectorAll(".btn")
+// document.get
+
 
 // DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
 /*-------------------------------- Functions --------------------------------*/
@@ -570,6 +574,7 @@ function renderGameOver(){
 function setTheme(theme){
     localStorage.setItem("theme", theme)
     document.documentElement.className = theme
+    changeButtons()
 }
 
 function toggleTheme(){
@@ -579,6 +584,20 @@ function toggleTheme(){
         setTheme("light");
 }
 
+function changeButtons(){
+    if(localStorage.getItem("theme") === "light"){
+        lightDarkBtn.innerHTML = "Dark Mode"
+        for (let button of allBtns){
+            button.className = "btn btn-outline-secondary buttons"
+        }
+    }
+    if(localStorage.getItem("theme") === "dark"){
+        lightDarkBtn.innerHTML = "Light Mode"
+        for (let button of allBtns){
+            button.className = "btn btn-outline-light buttons"
+        }
+    }
+}
 /*----------------------------- Event Listeners --------------------------------*/
 // keyboard input
 document.addEventListener("keydown", function(event){
@@ -697,12 +716,7 @@ document.querySelector("#hold-button").addEventListener("click", function(event)
 })
 // settings
 document.querySelector("#light-dark-mode").addEventListener("click", toggleTheme)
-// document.querySelector("#settings").addEventListener("click", function(event){
-//     console.log(event.target.id)
-// })
-// document.querySelector("#controls-panel").addEventListener("click", function(event){
-//     console.log(event.target.id)
-// })
+
 document.querySelector("#reset-button").addEventListener("click", function(event){
     console.log("RESET PRESSED")
     startStopInterval("pause")
