@@ -1,4 +1,6 @@
-/*-------------------------------- Objects --------------------------------*/
+/*-------------------------------------------------------------------------------------
+.................................... CONSTANTS ........................................
+--------------------------------------------------------------------------------------*/
 const currentState = {
     block: null,
     rotation: null, 
@@ -6,7 +8,6 @@ const currentState = {
     column: null, 
     row: null,
 }
-
 const tester = {
     board: [],
     column: null, 
@@ -14,7 +15,6 @@ const tester = {
     block: null,
     rotation: null, 
 }
-
 const lBlock = {
     0: [[0,0,0,0],
         [0,0,1,0],
@@ -141,20 +141,22 @@ const tBlock = {
         [1,1,0,0],
         [0,1,0,0]],
 }
-
-/*------------------------------- Constants --------------------------------*/
 const emptyRow = [1,0,0,0,0,0,0,0,0,0,0,1] // 10 playable squares + 1 border square on each side
 const fullRow = [1,1,1,1,1,1,1,1,1,1,1,1] // used for top and bottom borders
 const allBlocks = [lBlock, reverseLBlock, square, iBlock, zBlock, reverseZBlock, tBlock]
 
-/*------------------------------- Variables --------------------------------*/
+/*-------------------------------------------------------------------------------------
+.................................... VARIABLES ........................................
+--------------------------------------------------------------------------------------*/
 let gameOver, gamePaused, linesCleared, timerIntervalId, holdingBlock
 let nextUpList = []
 let boardArray = []
 let blktypeArray = []
 let heldBlockObj = []
 
-/*------------------------- Cached Element References --------------------------*/
+/*-------------------------------------------------------------------------------------
+............................. CACHED ELEMENT REFERENCES ...............................
+--------------------------------------------------------------------------------------*/
 const board = document.querySelector("#board-container")
 const nextUpContainer = document.querySelector("#next-block-container")
 const holdContainer = document.querySelector("#hold")
@@ -163,22 +165,21 @@ const linesClearedDisplay = document.querySelector("#number")
 const msgOverlay = document.querySelector("#msg-overlay")
 const lightDarkBtn = document.querySelector("#light-dark-mode")
 const allBtns = document.querySelectorAll(".btn")
-// document.get
 
-
-// DEBUGGER: console.log(JSON.parse(JSON.stringify(boardArray)))
-/*-------------------------------- Functions --------------------------------*/
+/*-------------------------------------------------------------------------------------
+.................................... FUNCTIONS ........................................
+--------------------------------------------------------------------------------------*/
 setUpDOM()
 init()
 
-/* ============================SET UP FUNCTIONS=============================== */
+/* ------------------------------ SET UP FUNCTIONS ---------------------------------- */
 function setUpDOM(){
+// On-screen set up
     createDOMBoard()
     createNextUpSpaces()
     createHoldSpace()
 }
 
-// On-screen game board set up
 function createDOMBoard(){
     for (let cell = 0; cell < (20 * 10); cell++) {
       let square = document.createElement("div")
@@ -663,8 +664,8 @@ document.addEventListener("keydown", function(event){
           return; // Quit when this doesn't handle the key event.
       }
 })
-// buttons for mobile
 
+// buttons for mobile
 startPauseButton.addEventListener("click", function(event){
     if (gameOver === false){
         startPause()
@@ -714,9 +715,9 @@ document.querySelector("#hold-button").addEventListener("click", function(event)
         hold()
     }
 })
+
 // settings
 document.querySelector("#light-dark-mode").addEventListener("click", toggleTheme)
-
 document.querySelector("#reset-button").addEventListener("click", function(event){
     console.log("RESET PRESSED")
     startStopInterval("pause")

@@ -1,5 +1,5 @@
 # Project 1: Tetris!
-![Snapshots showing light and dark modes of Tetris games in play!](https://i.imgur.com/ISD1ktN.png)
+![Snapshots showing light and dark modes of Tetris games in play!](assets/images/mobile.png)
 
 I recreated the beloved game of Tetris as a tribute for all the time I dedicated to its art during my college classes. This web-based browser game can be played on both computers and mobile devices.
 

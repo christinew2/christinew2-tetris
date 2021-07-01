@@ -316,10 +316,12 @@ html {
     }
     #title-container {
       order: 1;
+      margin-bottom: 3vmin;
     }
     .board-area {
       order: 2;
       padding: 1vmin;
+      margin-bottom: 4vmin;
       background-color: rgba(165, 164, 164, 0.397);
       border-radius: 1vmin;
     }
@@ -335,6 +337,10 @@ html {
       border-radius: 1vmin;
     }
 
+    .status-title{
+      margin: 1.5vmin 1vmin 1vmin 1vmin;
+    }
+
     #status-container {
       order: 3;
       display: flex;
@@ -343,11 +349,28 @@ html {
       justify-content: space-evenly;
       background-color: rgba(206, 206, 206, 0.479);
       border-radius: 1vmin;
+      margin-top: 0.1vmin;
+      margin-bottom: 4vmin;
+    }
+
+    #number {
+      padding: 0;
+    }
+
+    #hold-container, 
+    #next-container{
+      margin: 1vmin 1vmin 2vmin 1vmin;
+    }
+
+    #hold-container > *{
+      margin-left: 0;
+      margin-right: 0;
     }
 
     #next-block-container{
       display: flex;
       flex-direction: column;
+      margin: 1vmin 0vmin;
     }
     #button-container {
       order: 4;
