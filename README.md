@@ -23,6 +23,10 @@ This game uses the following keyboard inputs
 - HTML
 - CSS
 - Javascript
+- Bootstrap
+#
+![Desktop Light Mode](assets/images/light.png)
+![Desktop Dark Mode](assets/images/dark.png)
 #
 ## Next Steps/ Future Enhancements
 - [ ] Fix color blocks when lines clear

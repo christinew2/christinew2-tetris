@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;700&display=swap');
+
 html {
     box-sizing: border-box
   }
@@ -14,13 +16,14 @@ html {
   /* resets font size to be 62.5% of the user preference - 
      in most browser configurations this will be 10px */
   :root {
-    font-size: 62.5%
+    font-size: 62.5%;
   }
   
   .light {
     --background: white;
     --background-image: linear-gradient(to left bottom, #ffffff, #f7f7f7, #f0f0f0, #e8e8e8, #e1e1e1);
-    --text-color: black;
+    --text-color: rgba(41, 41, 41, 0.925);
+    --text-shadow: -4px 4px 1px rgb(199, 199, 199);
 
     --i-block-color: #ff9bcd;
     --l-block-color: #ffc96cd0;
@@ -49,6 +52,7 @@ html {
     --background: rgb(0, 0, 0);
     --background-image: linear-gradient(to right top, #303030, #404040, #525252, #646464, #767676);
     --text-color: white;
+    --text-shadow: -4.5px 3.5px 1px rgb(119, 119, 119);
 
     --i-block-color: #aa6d65;
     --l-block-color: #c48851;
@@ -73,31 +77,6 @@ html {
     --game-over-border: 1px solid gray;
 
   }
-  .other {
-    --background: black;
-    --background-image: linear-gradient(to right top, #303030, #404040, #525252, #646464, #767676);
-    --text-color: white;
-
-    --i-block-color: #e7bebe;
-    --l-block-color: #dabd93;
-    --reverse-l-block-color: #f3eca8;
-    --square-block-color: #96dba0e5;
-    --z-block-color: #a0e5e5dc;
-    --reverse-z-block-color: #87aed4e3;
-    --t-block-color: #b1aae9e8;
-
-    --block-border: 0.1rem solid white;
-    --block-holder-border: .5px solid black;
-    --block-holder-color: rgba(31, 31, 31, 0.932);
-
-    --board-container-border: 1px solid black;
-    --grid-line-color: 0.1rem solid rgb(216, 216, 216);
-
-    --game-over-box-color: rgba(226, 226, 226, 0.8);
-    --game-over-text-color: rgb(49, 49, 49);
-    --game-over-border: 1px solid gray;
-
-  }
 
   body {
     text-align: center;
@@ -113,8 +92,7 @@ html {
     align-items: center;
     align-content: center;
   /* Use a system font, if none are available use an available sans-sarif   font */
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-      Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-family: 'Quicksand', sans-serif;
     color: var(--text-color);
     margin: 0;
   }
@@ -131,8 +109,6 @@ html {
     margin-top: 3vmin;
   }
   
-  
-
   #title-container{
     display: flex;
     flex-flow: row nowrap;
@@ -147,6 +123,7 @@ html {
   #game-name{
     font-weight: bold;
     font-size: 7vmin;
+    text-shadow: var(--text-shadow);
   }
 
   #settings-container > *{
@@ -156,13 +133,6 @@ html {
   #reset-button{
     font-size: 2.3vmin;
   }
-
-
-/* 
-  #controls-panel{
-    font-size: 5rem;
-    border-radius: 20;
-  } */
 
   #button-container{
     width: 100%;
@@ -200,10 +170,10 @@ html {
     justify-content: space-evenly;
     margin-left: 3vmin;
   }
+
   #hold-container{
     margin-left: 3vmin;
   }
-
 
   #board-container {
     display: inline-grid;
@@ -225,22 +195,27 @@ html {
     text-align: center;
 
   }  
+
   #arrows-container {
     margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
+
   #arrows-container > *{
     font-size: 5vmin;
     width: 14vmin;
     height: 10vmin;
   }
+
   #rotators-container {
     margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
+
   #rotators-container >*{
     font-size: 4.2vmin;
     width:  14vmin;
     height: 10vmin;
   }
+
   #hold-button {
     font-size: 2.7vmin;
     width: 14vmin;
@@ -270,16 +245,19 @@ html {
     border-bottom: var(--block-border);
 
   }
+
   .reverselblock {
     background-color: var(--reverse-l-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
+
   .squareblock {
     background-color: var(--square-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
+  
   .iblock {
     background-color: var(--i-block-color);
     border-right: var(--block-border);
