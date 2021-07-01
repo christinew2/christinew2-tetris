@@ -36,6 +36,7 @@ This game uses the following keyboard inputs
 - [ ] Add levels & increase dropping speed
 - [ ] Add multipliers to the scoreboard when multiple or consecutive lines are cleared
 - [ ] Implement rule that user cannot hold consecutively
+- [ ] Refactor code so that blocks are centered in Hold and Next Up containers
 
 #
 ## References
