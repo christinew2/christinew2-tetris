@@ -697,13 +697,14 @@ document.querySelector("#hold-button").addEventListener("click", function(event)
 })
 // settings
 document.querySelector("#light-dark-mode").addEventListener("click", toggleTheme)
-document.querySelector("#settings").addEventListener("click", function(event){
-    console.log(event.target.id)
-})
-document.querySelector("#controls-panel").addEventListener("click", function(event){
-    console.log(event.target.id)
-})
+// document.querySelector("#settings").addEventListener("click", function(event){
+//     console.log(event.target.id)
+// })
+// document.querySelector("#controls-panel").addEventListener("click", function(event){
+//     console.log(event.target.id)
+// })
 document.querySelector("#reset-button").addEventListener("click", function(event){
+    console.log("RESET PRESSED")
     startStopInterval("pause")
     gamePaused = true
     init()
