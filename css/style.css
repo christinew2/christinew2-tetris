@@ -114,36 +114,50 @@ html {
     margin: 0;
   }
 
-  
-  #title-container{
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  #settings-container > *{
-    font-size: 1rem;
-  }
-  #reset-button{
-    font-size: 1rem;
-  }
-
   #status-container,
   #button-container,
   #settings-container {
     display: flex;
     flex-flow: row nowrap;
     justify-content:center;
-    align-items: flex-start;
+    /* align-items: center; */
     text-align: center;
+    margin-bottom: 2vmin;
+    margin-top: 3vmin;
+  }
+  
+  
+
+  #title-container{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
   }
 
-  #status-container,
-  #button-container{
-    margin-bottom: 2vmin;
-    margin-top: 5vmin;
+  #game-name{
+    font-weight: bold;
+    font-size: 7vmin;
   }
+
+  #settings-container > *{
+    font-size: 2.3vmin;
+  }
+
+  #reset-button{
+    font-size: 2.3vmin;
+  }
+
+
+/* 
+  #controls-panel{
+    font-size: 5rem;
+    border-radius: 20;
+  } */
 
   #button-container{
     width: 100%;
@@ -152,7 +166,10 @@ html {
 
   .status-title{
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 2.5vmin;
+    margin-bottom: 0.5vmin;
+    margin-left: 3vmin;
+    margin-right: 2vmin;
   }
   #number{
     padding: 1vmin 1vmin 1vmin 1vmin;
@@ -176,6 +193,10 @@ html {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
+    margin-left: 3vmin;
+  }
+  #hold-container{
+    margin-left: 3vmin;
   }
 
 
@@ -202,7 +223,7 @@ html {
     margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
   #arrows-container > *{
-    font-size: 2rem;
+    font-size: 5vmin;
     width: 14vmin;
     height: 10vmin;
   }
@@ -210,12 +231,12 @@ html {
     margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
   }
   #rotators-container >*{
-    font-size: 2rem;
+    font-size: 4.2vmin;
     width:  14vmin;
     height: 10vmin;
   }
   #hold-button {
-    font-size: 1rem;
+    font-size: 2.7vmin;
     width: 14vmin;
     height: 10vmin;
     margin: 0.5vmin 0.5vmin 0.5vmin 0.5vmin;
@@ -279,20 +300,20 @@ html {
   @media only screen and (min-width: 660px){
     body{
       background-size: 300% 300%;
-      display: grid;
-      grid-template-columns: auto auto auto auto;
-      grid-template-rows: auto auto auto auto auto;
+      /* display: grid;
+      grid-template-columns: 25% 50% 20% 15%;
+      grid-template-rows: 10% 15% 15% 50% 10%;
       grid-template-areas:
-        "title" "title" "settings" "settings"
-        "empty" "board" "cleared" "empty"
-        "empty" "board" "hold" "empty"
-        "empty" "board" "next" "empty"
-        "empty" "controls" "controls" "empty"
-
+        "title" "board" "settings" "settings"
+        "title" "board" "cleared" "settings"
+        "title" "board" "hold" "settings"
+        "title" "board" "next" "settings"
+        "controls" "controls" "controls" "controls"
+ */
 
     }
 
-    #game-name {
+    /* #game-name {
       grid-area: title;
       font-size: 10rem;
     }
@@ -323,7 +344,7 @@ html {
 
     #button-container {
       grid-area: controls;
-    }
+    } */
   }
 
   @media only screen and (min-width: 1024px){

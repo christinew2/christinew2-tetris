@@ -426,6 +426,8 @@ function checkForFullRow(){
                 linesCleared++
                 boardArray.splice(row, 1)
                 boardArray.splice(1,0, emptyRow.slice())
+                blktypeArray.splice(row,1)
+                blktypeArray.splice(1,0,emptyRow.slice())
                 displayLinesCleared()
             }
         }
