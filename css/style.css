@@ -300,51 +300,49 @@ html {
   @media only screen and (min-width: 660px){
     body{
       background-size: 300% 300%;
-      /* display: grid;
-      grid-template-columns: 25% 50% 20% 15%;
-      grid-template-rows: 10% 15% 15% 50% 10%;
-      grid-template-areas:
-        "title" "board" "settings" "settings"
-        "title" "board" "cleared" "settings"
-        "title" "board" "hold" "settings"
-        "title" "board" "next" "settings"
-        "controls" "controls" "controls" "controls"
- */
-
+      flex-flow: row wrap;
+      justify-content: center; 
+      overflow: hidden;
+    }
+    .break {
+      flex-basis: 100%;
+      height: 0;
+    }
+    #title-container {
+      order: 1;
+    }
+    .board-area {
+      order: 2;
     }
 
-    /* #game-name {
-      grid-area: title;
-      font-size: 10rem;
-    }
-
-    #settings-container {
-      grid-area: settings;
-    }
-
-  
     #board-container {
-      grid-area: board;
+      display: inline-grid;
       grid-template-rows: repeat(20, 4vmin);
       grid-template-columns: repeat(10, 4vmin);
-      
+      grid-gap: 0vmin;
+      border: var(--board-container-border);
+      justify-content: center;
+      background-color: var(--block-holder-color);
+      border-radius: 2px;
     }
 
-    #cleared-container {
-      grid-area: cleared;
+    #status-container {
+      order: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
     }
 
-    #hold-container {
-      grid-area: hold;
+    #next-block-container{
+      display: flex;
+      flex-direction: column;
     }
-
-    #next-container {
-      grid-area: next;
-    }
-
     #button-container {
-      grid-area: controls;
-    } */
+      order: 4;
+      visibility: hidden;
+    }
+   
   }
 
   @media only screen and (min-width: 1024px){
