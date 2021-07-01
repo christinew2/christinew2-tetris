@@ -43,9 +43,7 @@ This game uses the following keyboard inputs
 - [ ] Refactor code so that blocks are centered in Hold and Next Up containers
 
 #
-## References
+## Credits & References
 - Tetris information and mechanics: [Tetris Wiki](https://tetris.fandom.com/wiki/Tetris_Wiki)
-- HTML/CSS/Javascript reference: [MDN](https://developer.mozilla.org/en-US/)
-- CSS Flexbox & Grid reference: [CSS Tricks](https://css-tricks.com/)
 - Gradient background: [ColorSpace](https://mycolor.space/)
-- Buttons: [Bootstrap](https://getbootstrap.com/)
+- Quicksand Font: [GoogleFonts](https://fonts.google.com/)
