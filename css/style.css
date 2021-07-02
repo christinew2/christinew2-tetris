@@ -4,17 +4,13 @@ html {
     box-sizing: border-box
   }
   
-  /* The Universal Selector */
-  *, /* All elements*/
-  *::before, /* All ::before pseudo-elements */
-  *::after { /* All ::after pseudo-elements */
-    /* height & width will now include border & padding by default
-       but can be over-ridden as needed */
+  *, 
+  *::before, 
+  *::after { 
+    
     box-sizing: inherit;
   }
   
-  /* resets font size to be 62.5% of the user preference - 
-     in most browser configurations this will be 10px */
   :root {
     font-size: 62.5%;
   }
@@ -39,13 +35,11 @@ html {
 
     --board-container-border: 1px solid black;
     --grid-line-color: 0.1rem solid rgb(216, 216, 216);
-    --board-box-shadow: ;
+    --board-box-shadow: 0;
 
     --game-over-box-color: rgba(226, 226, 226, 0.8);
     --game-over-text-color: rgb(49, 49, 49);
     --game-over-border: 1px solid gray;
-  
-
   }
 
   .dark {
@@ -75,7 +69,6 @@ html {
     --game-over-box-color: rgba(226, 226, 226, 0.8);
     --game-over-text-color: rgb(49, 49, 49);
     --game-over-border: 1px solid gray;
-
   }
 
   body {
@@ -91,7 +84,6 @@ html {
     justify-content: center; 
     align-items: center;
     align-content: center;
-  /* Use a system font, if none are available use an available sans-sarif   font */
     font-family: 'Quicksand', sans-serif;
     color: var(--text-color);
     margin: 0;
@@ -103,7 +95,6 @@ html {
     display: flex;
     flex-flow: row nowrap;
     justify-content:center;
-    /* align-items: center; */
     text-align: center;
     margin-bottom: 2vmin;
     margin-top: 3vmin;
@@ -146,6 +137,7 @@ html {
     margin-left: 3vmin;
     margin-right: 2vmin;
   }
+
   #number{
     padding: 1vmin 1vmin 1vmin 1vmin;
     font-weight: bold;
@@ -193,7 +185,6 @@ html {
     align-content: center;
     justify-content: center;
     text-align: center;
-
   }  
 
   #arrows-container {
@@ -243,7 +234,6 @@ html {
     background-color: var(--l-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border);
-
   }
 
   .reverselblock {
@@ -257,28 +247,30 @@ html {
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
-  
+
   .iblock {
     background-color: var(--i-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
+
   .zblock {
     background-color: var(--z-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
+
   .reversezblock {
     background-color: var(--reverse-z-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
+
   .tblock {
     background-color: var(--t-block-color);
     border-right: var(--block-border);
     border-bottom: var(--block-border)
   }
-
 
 
   @media only screen and (min-width: 660px){
@@ -354,7 +346,6 @@ html {
       order: 4;
       visibility: hidden;
     }
-   
   }
 
 
