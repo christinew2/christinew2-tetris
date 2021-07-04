@@ -483,7 +483,7 @@ function startStopInterval(actionStr){
     }
 }
 
-/*----------------------------------- HOLD FUNCTION --------------------------------------*/
+/*--------------------------------------- HOLD FUNCTION -----------------------------------------*/
 function hold() {
     if (holdingBlock === false){
     // if no block is being held, assign current block to "hold" 
@@ -507,7 +507,7 @@ function hold() {
     renderHold()
 } 
 
-/*---------------------------------- RENDER FUNCTIONS --------------------------------------*/
+/*------------------------------------- RENDER FUNCTIONS --------------------------------------*/
 function renderBoard(){
     let index = 0;
     for (let rows = 1; rows <= 20; rows++){

@@ -24,12 +24,14 @@ This game uses the following keyboard inputs
 - CSS
 - Javascript
 - Bootstrap
+- Git
 #
 ![Desktop Light Mode](assets/images/light.png)
 ![Desktop Dark Mode](assets/images/dark.png)
 #
 ## Next Steps/ Future Enhancements
 - [ ] Fix color blocks when lines clear
+- [ ] Clear hold space upon game reset
 - [ ] Add control panel pop-up screen to show controls
 - [ ] Allow user to change control keys 
 - [ ] Add audio: music and sound effects 
@@ -42,6 +44,9 @@ This game uses the following keyboard inputs
 - [ ] Implement rule that user cannot hold consecutively
 - [ ] Refactor code so that blocks are centered in Hold and Next Up containers
 
+#
+## Original Wireframe
+![Tetris Wireframe](assets/images/wireframe.png)
 #
 ## Credits & References
 - Tetris information and mechanics: [Tetris Wiki](https://tetris.fandom.com/wiki/Tetris_Wiki)
